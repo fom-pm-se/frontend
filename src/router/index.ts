@@ -1,5 +1,6 @@
 // Composables
 import { createRouter, createWebHistory } from 'vue-router'
+import * as path from "path";
 
 const routes = [
   {
@@ -16,6 +17,14 @@ const routes = [
       },
     ],
   },
+  {
+    path: '/register',
+    component: () => import('@/layouts/default/Register.vue')
+  },
+  {
+    path: '/login',
+    component: () => import('@/layouts/default/Login.vue')
+  }
 ]
 
 const router = createRouter({
