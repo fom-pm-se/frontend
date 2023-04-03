@@ -26,12 +26,31 @@
               color="primary"
               type="submit"
               aria-label="submit"
-              block
               :disabled="!isValid()"
               :loading="$props.isLoading"
               @click="onSubmit()"
             >Einloggen
             </v-btn>
+            <v-dialog
+              v-model="forgotPasswordDialog"
+              max-width="700px"
+            >
+              <template v-slot:activator="{ props }">
+                <v-btn
+                  color="primary"
+                  v-bind="props"
+                  variant="text"
+                >
+                  Passwort vergessen?
+                </v-btn>
+              </template>
+
+              <v-card>
+                <v-card-text>
+                  <reset-password-form></reset-password-form>
+                </v-card-text>
+              </v-card>
+            </v-dialog>
           </v-col>
         </v-row>
       </v-form>
@@ -40,8 +59,11 @@
 </template>
 <script>
 
+import ResetPasswordForm from "@/components/ResetPasswordForm.vue";
+
 export default {
   name: 'LoginForm',
+  components: {ResetPasswordForm},
   props: {
     isLoading: {
       type: Boolean,
@@ -53,6 +75,7 @@ export default {
       valid: false,
       email: '',
       password: '',
+      forgotPasswordDialog: false,
       rules: {
         required: (value) => !!value || 'Pflichtfeld.',
         email: (value) => /.+@.+\..+/.test(value) || 'Bitte gültige E-Mail eingeben.',

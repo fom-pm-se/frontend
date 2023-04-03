@@ -2,7 +2,16 @@
   <v-app-bar :elevation="4" color="primary">
     <v-app-bar-title>CRM</v-app-bar-title>
     <template v-slot:append>
-      <v-btn @click="toggleTheme" color="secondary">Dark Mode</v-btn>
+      <v-tooltip text="Toggle Theme" location="bottom">
+        <template v-slot:activator="{ props }">
+          <v-btn v-bind="props" icon="mdi-wrench" @click="toggleTheme"></v-btn>
+        </template>
+      </v-tooltip>
+      <v-tooltip text="Logout" location="bottom">
+        <template v-slot:activator="{ props }">
+          <v-btn v-bind="props" icon="mdi-logout" @click="logout"></v-btn>
+        </template>
+      </v-tooltip>
     </template>
   </v-app-bar>
 </template>
@@ -18,6 +27,12 @@
         toggleTheme: () => {
           theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark';
         }
+      }
+    },
+    methods: {
+      logout() {
+        localStorage.removeItem('token');
+        this.$router.push('/login');
       }
     }
   }

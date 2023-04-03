@@ -1,90 +1,64 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col>
-        <v-form validate-on="blur">
-          <v-text-field
-            v-model="firstName"
-            label="Vorname"
-            aria-label="firstname"
-            placeholder="Max"
-            :rules="[rules.required]"
-          ></v-text-field>
-          <v-text-field
-            v-model="lastName"
-            label="Nachname"
-            aria-label="lastname"
-            placeholder="Mustermann"
-            :rules="[rules.required]"
-          ></v-text-field>
-          <v-text-field
-            v-model="email"
-            label="E-Mail"
-            aria-label="email"
-            placeholder="max.mustermann@firma.de"
-            :rules="[rules.required, rules.email]"
-          ></v-text-field>
-          <v-text-field
-            v-model="password"
-            label="Passwort"
-            aria-label="password"
-            :rules="[rules.required, rules.min]"
-            type="password"
-          ></v-text-field>
-          <v-text-field
-            v-model="passwordConfirm"
-            label="Passwort bestätigen"
-            aria-label="passwordConfirm"
-            :rules="[rules.min, rules.sameAsPassword]"
-            type="password"
-          ></v-text-field>
-          <v-checkbox
-            v-model="terms"
-            label="Ich habe die AGB gelesen und akzeptiere diese."
-            aria-label="terms"
-            :rules="[rules.requiredCheckBox]"
-          ></v-checkbox>
-          <v-row class="mt-5">
-            <v-col>
-              <v-btn
-                color="primary"
-                type="submit"
-                aria-label="submit"
-                block
-                :disabled="!valid"
-              >Registrieren</v-btn>
-            </v-col>
-          </v-row>
-        </v-form>
-      </v-col>
-    </v-row>
-  </v-container>
+  <v-row>
+    <v-col>
+      <v-form :disabled="isLoading" @submit.prevent>
+        <v-alert class="mb-5" type="error" v-if="usernameTaken" variant="outlined">Der Benutzer existiert bereits.</v-alert>
+        <v-text-field label="Vorname" v-model="firstname" :rules="[rules.required]"></v-text-field>
+        <v-text-field label="Nachname" v-model="lastname" :rules="[rules.required]"></v-text-field>
+        <v-text-field label="E-Mail" v-model="email" v-on:input="validateUsername" :rules="[rules.email, rules.required]"></v-text-field>
+        <v-text-field label="Passwort" type="password" v-model="password" :rules="[rules.min, rules.required]"></v-text-field>
+        <v-text-field label="Passwort wiederholen" type="password" v-model="passwordRepeat" :rules="[rules.mustMatchPassword]"></v-text-field>
+        <v-btn color="primary" :disabled="usernameTaken || isLoading" :loading="isLoading" @click="onSubmit">Registrieren</v-btn>
+      </v-form>
+    </v-col>
+  </v-row>
 </template>
-
 <script>
+import {isUsernameAvailable} from "@/service/AuthenticationService";
+
 export default {
-  name: "LoginForm",
+  name: 'RegisterForm',
+  props: {
+    isLoading: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
-      valid: false,
-      firstName: '',
-      lastName: '',
+      firstname: '',
+      lastname: '',
       email: '',
       password: '',
-      passwordConfirm: '',
-      terms: false,
+      passwordRepeat: '',
+      usernameTaken: false,
       rules: {
         required: (value) => !!value || 'Pflichtfeld.',
-        requiredCheckBox: (value) => !!value || 'Bitte bestätigen.',
         email: (value) => /.+@.+\..+/.test(value) || 'Bitte gültige E-Mail eingeben.',
         min: (v) => v.length >= 8 || 'Mindestens 8 Zeichen.',
-        sameAsPassword: (value) => value === this.password || 'Passwörter stimmen nicht überein.'
+        mustMatchPassword: (v) => v === this.passwordRepeat || 'Passwörter stimmen nicht überein.',
       }
     }
   },
   methods: {
-    validateForm() {
-      this.valid = !!(this.firstName && this.lastName && this.email && this.password && this.passwordConfirm && this.terms);
+    validateUsername() {
+      isUsernameAvailable(this.email).then((response) => {
+        if (response.data) {
+          this.usernameTaken = false;
+        } else {
+          this.usernameTaken = true;
+        }
+      });
+    },
+    onSubmit() {
+      const registerRequest = {
+        firstname: this.firstname,
+        lastname: this.lastname,
+        username: this.email,
+        password: this.password,
+      };
+      console.log('registerRequest', registerRequest);
+      this.$emit('register', registerRequest);
     }
   }
 }

@@ -1,7 +1,21 @@
 <template>
-  <h1>Home</h1>
+  <h1>{{ name }}</h1>
 </template>
 
-<script lang="ts" setup>
-  import HelloWorld from '@/components/HelloWorld.vue'
+<script lang="js">
+
+export default {
+  name: 'Homepage',
+  data() {
+    return {
+      name: 'Homepage',
+    };
+  },
+  updated() {
+    console.log('updated');
+    if (localStorage.getItem('token')) {
+      this.$router.push('/login');
+    }
+  }
+}
 </script>
