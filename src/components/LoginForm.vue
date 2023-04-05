@@ -57,11 +57,11 @@
     </v-col>
   </v-row>
 </template>
-<script>
+<script lang="ts">
 
 import ResetPasswordForm from "@/components/ResetPasswordForm.vue";
-
-export default {
+import {defineComponent} from "vue";
+export default defineComponent({
   name: 'LoginForm',
   components: {ResetPasswordForm},
   props: {
@@ -77,9 +77,9 @@ export default {
       password: '',
       forgotPasswordDialog: false,
       rules: {
-        required: (value) => !!value || 'Pflichtfeld.',
-        email: (value) => /.+@.+\..+/.test(value) || 'Bitte gültige E-Mail eingeben.',
-        min: (v) => v.length >= 8 || 'Mindestens 8 Zeichen.',
+        required: (value: any) => !!value || 'Pflichtfeld.',
+        email: (value: any) => /.+@.+\..+/.test(value) || 'Bitte gültige E-Mail eingeben.',
+        min: (v: any) => v.length >= 8 || 'Mindestens 8 Zeichen.',
       }
     }
   },
@@ -95,5 +95,5 @@ export default {
       this.$emit('login', loginRequest);
     }
   }
-}
+});
 </script>

@@ -26,16 +26,18 @@
   </v-form>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import {defineComponent} from "vue";
+
+export default defineComponent({
   name: "ResetPasswordForm",
   data() {
     return {
       email: "",
       submitted: false,
       rules: {
-        required: (value) => !!value || "Pflichtfeld.",
-        email: (value) =>
+        required: (value: any) => !!value || "Pflichtfeld.",
+        email: (value: any) =>
           /.+@.+\..+/.test(value) || "Bitte gültige E-Mail eingeben.",
       },
     };
@@ -48,7 +50,7 @@ export default {
       return this.email !== "" && /.+@.+\..+/.test(this.email);
     },
   },
-}
+});
 </script>
 <style scoped>
 
