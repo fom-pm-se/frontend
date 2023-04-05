@@ -16,10 +16,11 @@
   </v-app-bar>
 </template>
 
-<script lang="js">
+<script lang="ts">
   import {useTheme} from "vuetify";
+  import {defineComponent} from "vue";
 
-  export default {
+  export default defineComponent({
     setup() {
       const theme = useTheme();
       return {
@@ -35,6 +36,5 @@
         this.$router.push('/login');
       }
     }
-  }
-
+  });
 </script>

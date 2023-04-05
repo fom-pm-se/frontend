@@ -2,9 +2,10 @@
   <h1>{{ name }}</h1>
 </template>
 
-<script lang="js">
+<script lang="ts">
+import { defineComponent } from 'vue';
 
-export default {
+export default defineComponent({
   name: 'Homepage',
   data() {
     return {
@@ -17,5 +18,5 @@ export default {
       this.$router.push('/login');
     }
   }
-}
+});
 </script>

@@ -1,7 +1,7 @@
 <template>
   <h2 class="mb-5">Kennwort zurücksetzen</h2>
   <p class="mt-5 mb-5">Bitte gebe hier die E-Mail-Adresse des Accounts ein, dessen Kennwort du zurücksetzen möchtest</p>
-  <v-form :disabled="this.submitted">
+  <v-form :disabled="submitted">
     <v-text-field
       v-model="email"
       label="E-Mail"
@@ -18,7 +18,7 @@
           color="primary"
           aria-label="submit"
           @click="onSubmit()"
-          :disabled="this.submitted || !isValid()"
+          :disabled="submitted || !isValid()"
         >Passwort zurücksetzen
         </v-btn>
       </v-col>
