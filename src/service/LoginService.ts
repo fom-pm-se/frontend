@@ -1,6 +1,9 @@
-import axios from "axios";
+import axios, {AxiosResponse} from "axios";
+import {LoginRequest} from "@/model/request/LoginRequest";
+import {RegisterRequest} from "@/model/request/RegisterRequest";
+import {AuthResponse} from "@/model/response/AuthResponse";
 
-export function login(loginRequest) {
+export function login(loginRequest: LoginRequest) {
     return axios.post("http://localhost:8080/api/v1/auth/signin", loginRequest)
         .then(response => {
             if (response.data.token) {
@@ -10,7 +13,7 @@ export function login(loginRequest) {
         });
 }
 
-export function register(registerRequest) {
+export function register(registerRequest: RegisterRequest): Promise<AxiosResponse<AuthResponse>> {
     return axios.post("http://localhost:8080/api/v1/auth/signup", registerRequest);
 }
 
