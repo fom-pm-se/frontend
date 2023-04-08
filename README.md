@@ -1,57 +1,17 @@
-# base
+# Build Status
 
-## Project setup
+Status of the main branch:
 
-```
-# yarn
-yarn
+![Integration](https://github.com/fom-pm-se/frontend/actions/workflows/integration.yml/badge.svg)
 
-# npm
-npm install
+![Delivery](https://github.com/fom-pm-se/frontend/actions/workflows/deployment.yml/badge.svg)
 
-# pnpm
-pnpm install
-```
+## Project Description
 
-### Compiles and hot-reloads for development
+This is the frontend Application for the FOM PM SE project.
 
-```
-# yarn
-yarn dev
+## Getting Started
 
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-```
-
-### Compiles and minifies for production
-
-```
-# yarn
-yarn build
-
-# npm
-npm run build
-
-# pnpm
-pnpm build
-```
-
-### Lints and fixes files
-
-```
-# yarn
-yarn lint
-
-# npm
-npm run lint
-
-# pnpm
-pnpm lint
-```
-
-### Customize configuration
-
-See [Configuration Reference](https://vitejs.dev/config/).
+For mor information please consult the Wiki of this project.
+<br/>
+[Wiki: Setup](https://github.com/fom-pm-se/frontend/wiki/Setup)
