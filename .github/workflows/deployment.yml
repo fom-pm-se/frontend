@@ -36,7 +36,7 @@ jobs:
           path: dist
       - name: Login to GitHub Package Registry
         run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-      - name: Build and push Docker image as frontend:{{ github.sha }}
+      - name: Build and push Docker image as frontend:version
         run: docker build -t ghcr.io/${{ github.repository }}:${{ github.sha }} . && docker push ghcr.io/${{ github.repository }}:${{ github.sha }}
       - name: Push Docker image as frontend:latest
         run: docker tag ghcr.io/${{ github.repository }}:${{ github.sha }} ghcr.io/${{ github.repository }}:latest && docker push ghcr.io/${{ github.repository }}:latest
