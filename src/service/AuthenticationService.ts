@@ -4,6 +4,6 @@ export function isAuthenticated() {
   return !!localStorage.getItem("token");
 }
 
-export function isUsernameAvailable(username) {
+export function isUsernameAvailable(username: string): Promise<any> {
   return axios.get("http://localhost:8080/api/v1/auth/exists?username=" + username);
 }

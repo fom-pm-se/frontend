@@ -8,15 +8,16 @@
         <v-text-field label="E-Mail" v-model="email" v-on:input="validateUsername" :rules="[rules.email, rules.required]"></v-text-field>
         <v-text-field label="Passwort" type="password" v-model="password" :rules="[rules.min, rules.required]"></v-text-field>
         <v-text-field label="Passwort wiederholen" type="password" v-model="passwordRepeat" :rules="[rules.mustMatchPassword]"></v-text-field>
-        <v-btn color="primary" :disabled="usernameTaken || isLoading" :loading="isLoading" @click="onSubmit">Registrieren</v-btn>
+        <v-btn color="primary" :disabled="usernameTaken || isLoading" :loading="isLoading" @click="onSubmit" type="submit">Registrieren</v-btn>
       </v-form>
     </v-col>
   </v-row>
 </template>
-<script>
+<script lang="ts">
 import {isUsernameAvailable} from "@/service/AuthenticationService";
+import {defineComponent} from "vue";
 
-export default {
+export default defineComponent({
   name: 'RegisterForm',
   props: {
     isLoading: {
@@ -33,10 +34,10 @@ export default {
       passwordRepeat: '',
       usernameTaken: false,
       rules: {
-        required: (value) => !!value || 'Pflichtfeld.',
-        email: (value) => /.+@.+\..+/.test(value) || 'Bitte gültige E-Mail eingeben.',
-        min: (v) => v.length >= 8 || 'Mindestens 8 Zeichen.',
-        mustMatchPassword: (v) => v === this.passwordRepeat || 'Passwörter stimmen nicht überein.',
+        required: (value: any) => !!value || 'Pflichtfeld.',
+        email: (value: any) => /.+@.+\..+/.test(value) || 'Bitte gültige E-Mail eingeben.',
+        min: (v: any) => v.length >= 8 || 'Mindestens 8 Zeichen.',
+        mustMatchPassword: () => this.password === this.passwordRepeat || 'Passwörter stimmen nicht überein.',
       }
     }
   },
@@ -61,7 +62,7 @@ export default {
       this.$emit('register', registerRequest);
     }
   }
-}
+});
 </script>
 
 <style scoped>

@@ -3,8 +3,8 @@
     <v-card>
       <v-tabs
         v-model="tab"
-        bg-color="primary"
         :disabled="isLoading"
+        bg-color="primary"
       >
         <v-tab value="login">Einloggen</v-tab>
         <v-tab value="register">Registrieren</v-tab>
@@ -15,10 +15,10 @@
           <v-window-item value="login">
             <v-container>
               <h1 class="pb-4">Einloggen</h1>
-              <login-form @login="handleLoginRequest" :is-loading="isLoading"></login-form>
-              <v-alert type="error" class="mb-5 mt-5" v-if="loginError" variant="outlined">
+              <login-form :is-loading="isLoading" @login="handleLoginRequest"></login-form>
+              <v-alert v-if="loginError" class="mb-5 mt-5" type="error" variant="outlined">
                 <v-alert-title>Login fehlgeschlagen</v-alert-title>
-                {{ errorMessage }}
+                {{ loginErrorMessage }}
               </v-alert>
             </v-container>
           </v-window-item>
@@ -26,8 +26,8 @@
           <v-window-item value="register">
             <v-container>
               <h1 class="pb-4">Benutzer registrieren</h1>
-              <register-form @register="handleRegisterRequest" :is-loading="isLoading"></register-form>
-              <v-alert type="error" class="mb-5 mt-5" v-if="registerError" variant="outlined">
+              <register-form :is-loading="isLoading" @register="handleRegisterRequest"></register-form>
+              <v-alert v-if="registerError" class="mb-5 mt-5" type="error" variant="outlined">
                 <v-alert-title>Registrierung fehlgeschlagen</v-alert-title>
                 {{ registerErrorMessage }}
               </v-alert>
@@ -39,42 +39,47 @@
   </v-container>
 </template>
 
-<script>
+<script lang="ts">
 import LoginForm from "@/components/LoginForm.vue";
 import RegisterForm from "@/components/RegisterForm.vue";
-import { login, register } from "@/service/LoginService";
+import {login, register} from "@/service/LoginService";
+import {LoginRequest} from "@/model/request/LoginRequest";
+import {RegisterRequest} from "@/model/request/RegisterRequest";
+import {defineComponent} from "vue";
 
-export default {
+export default defineComponent({
   name: "Login",
   components: {LoginForm, RegisterForm},
-  data: () => ({
-    tab: null,
-    isLoading: false,
-    loginError: null,
-    registerError: null,
-    registerErrorMessage: null,
-    errorMessage: null,
-    forgotPasswordDialog: false
-  }),
+  data() {
+    return {
+      tab: null,
+      isLoading: false,
+      loginError: false,
+      registerError: false,
+      registerErrorMessage: "",
+      loginErrorMessage: "",
+      forgotPasswordDialog: false
+    }
+  },
   methods: {
-    handleLoginRequest(loginRequest) {
-      this.isLoading = true;
+    handleLoginRequest(loginRequest: LoginRequest) {
+      this.isLoading = true
       login(loginRequest)
         .then(() => {
           this.isLoading = false;
           this.$router.push({name: 'Home'});
         })
-        .catch((err) => {
+        .catch((err: any) => {
           this.loginError = true;
           if (err.code === 'ERR_NETWORK') {
-            this.errorMessage = 'Ein Netzwerkfehler ist aufgetreten. Bitte versuchen Sie es später erneut.';
+            this.loginErrorMessage = 'Ein Netzwerkfehler ist aufgetreten. Bitte versuchen Sie es später erneut.';
           } else {
-            this.errorMessage = 'Benutzername oder Passwort sind falsch.';
+            this.loginErrorMessage = 'Benutzername oder Passwort sind falsch.';
           }
           this.isLoading = false;
         });
     },
-    handleRegisterRequest(registerRequest) {
+    handleRegisterRequest(registerRequest: RegisterRequest) {
       console.log(registerRequest)
       this.isLoading = true;
       register(registerRequest)
@@ -93,7 +98,7 @@ export default {
         });
     }
   }
-}
+});
 </script>
 
 <style scoped>
