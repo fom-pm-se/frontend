@@ -11,26 +11,19 @@
       </v-tabs>
 
       <v-card-text>
+        <alert-wrapper/>
         <v-window v-model="tab">
           <v-window-item value="login">
             <v-container>
               <h1 class="pb-4">Einloggen</h1>
-              <login-form :is-loading="isLoading" @login="handleLoginRequest"></login-form>
-              <v-alert v-if="loginError" class="mb-5 mt-5" type="error" variant="outlined">
-                <v-alert-title>Login fehlgeschlagen</v-alert-title>
-                {{ loginErrorMessage }}
-              </v-alert>
+              <login-form :is-loading="isLoading" @login="onLogin"></login-form>
             </v-container>
           </v-window-item>
 
           <v-window-item value="register">
             <v-container>
               <h1 class="pb-4">Benutzer registrieren</h1>
-              <register-form :is-loading="isLoading" @register="handleRegisterRequest"></register-form>
-              <v-alert v-if="registerError" class="mb-5 mt-5" type="error" variant="outlined">
-                <v-alert-title>Registrierung fehlgeschlagen</v-alert-title>
-                {{ registerErrorMessage }}
-              </v-alert>
+              <register-form :is-loading="isLoading" @register="onRegistration"></register-form>
             </v-container>
           </v-window-item>
         </v-window>
@@ -39,66 +32,66 @@
   </v-container>
 </template>
 
-<script lang="ts">
-import LoginForm from "@/components/LoginForm.vue";
+<script lang="ts" setup>
 import RegisterForm from "@/components/RegisterForm.vue";
-import {login, register} from "@/service/LoginService";
-import {LoginRequest} from "@/model/request/LoginRequest";
+import LoginForm from "@/components/LoginForm.vue";
+import AlertWrapper from "@/components/common/AlertWrapper.vue";
+import {onMounted, ref, watch} from "vue";
 import {RegisterRequest} from "@/model/request/RegisterRequest";
-import {defineComponent} from "vue";
+import {onRegistrationRequest} from "@/service/RegistrationService";
+import {useTokenStore} from "@/store/TokenStore";
+import {useUserStore} from "@/store/UserStore";
+import router from "@/router";
+import {LoginRequest} from "@/model/request/LoginRequest";
+import {onLoginRequest} from "@/service/LoginService";
 
-export default defineComponent({
-  name: "Login",
-  components: {LoginForm, RegisterForm},
-  data() {
-    return {
-      tab: null,
-      isLoading: false,
-      loginError: false,
-      registerError: false,
-      registerErrorMessage: "",
-      loginErrorMessage: "",
-      forgotPasswordDialog: false
-    }
-  },
-  methods: {
-    handleLoginRequest(loginRequest: LoginRequest) {
-      this.isLoading = true
-      login(loginRequest)
-        .then(() => {
-          this.isLoading = false;
-          this.$router.push({name: 'Home'});
-        })
-        .catch((err: any) => {
-          this.loginError = true;
-          if (err.code === 'ERR_NETWORK') {
-            this.loginErrorMessage = 'Ein Netzwerkfehler ist aufgetreten. Bitte versuchen Sie es später erneut.';
-          } else {
-            this.loginErrorMessage = 'Benutzername oder Passwort sind falsch.';
-          }
-          this.isLoading = false;
-        });
-    },
-    handleRegisterRequest(registerRequest: RegisterRequest) {
-      console.log(registerRequest)
-      this.isLoading = true;
-      register(registerRequest)
-        .then(() => {
-          this.isLoading = false;
-          this.$router.push({name: 'Home'});
-        })
-        .catch((err) => {
-          this.registerError = true;
-          if (err.code === 'ERR_NETWORK') {
-            this.registerErrorMessage = 'Ein Netzwerkfehler ist aufgetreten. Bitte versuchen Sie es später erneut.';
-          } else {
-            this.registerErrorMessage = 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.';
-          }
-          this.isLoading = false;
-        });
-    }
+const tokenStore = useTokenStore();
+
+let tab = ref("login");
+let isLoading = ref(false);
+const userStore = useUserStore();
+
+async function onRegistration(registerRequest: RegisterRequest) {
+  try {
+    isLoading.value = true;
+    await onRegistrationRequest(registerRequest);
+    backToLogin();
+  } catch (e) {
+    console.log('what happened?', e);
+  } finally {
+    isLoading.value = false;
   }
-});
+}
+
+async function onLogin(loginRequest: LoginRequest) {
+  try {
+    isLoading.value = true;
+    await onLoginRequest(loginRequest);
+  } catch (e) {
+    console.log('what happened?', e);
+  } finally {
+    isLoading.value = false;
+  }
+}
+
+function backToLogin(): void {
+  tab.value = "login";
+}
+
+onMounted(() => {
+  if (tokenStore.token.length > 0) {
+    userStore.fetchUser();
+    router.push('/');
+  } else {
+    watch(tokenStore, (newValue) => {
+      if (newValue.token.length > 0) {
+        userStore.fetchUser();
+        router.push('/');
+      }
+    })
+  }
+})
+
 </script>
 
 <style scoped>
