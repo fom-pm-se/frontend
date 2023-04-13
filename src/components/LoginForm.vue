@@ -4,7 +4,7 @@
       <v-form
         @submit.prevent
         :model-value="isValid()"
-        :disabled="isLoading"
+        :disabled="isLoading as boolean"
       >
         <v-text-field
           v-model="email"
@@ -27,7 +27,7 @@
               type="submit"
               aria-label="submit"
               :disabled="!isValid()"
-              :loading="$props.isLoading"
+              :loading="$props.isLoading as boolean"
               @click="onSubmit()"
             >Einloggen
             </v-btn>

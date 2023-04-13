@@ -19,6 +19,7 @@
 <script lang="ts">
   import {useTheme} from "vuetify";
   import {defineComponent} from "vue";
+  import {logout} from "@/service/AuthenticationService";
 
   export default defineComponent({
     setup() {
@@ -32,8 +33,7 @@
     },
     methods: {
       logout() {
-        localStorage.removeItem('token');
-        this.$router.push('/login');
+        logout();
       }
     }
   });
