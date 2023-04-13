@@ -18,7 +18,7 @@ import {ref} from "vue";
 const tokenStore = useTokenStore();
 const userStore = useUserStore();
 userStore.fetchUser();
-if (!userStore.isUserLoggedIn || !userStore.isUserLoaded) {
+if (!userStore.isUserLoggedIn || !userStore.isUserLoaded || !tokenStore.token) {
   router.push('/login')
 }
 const user = ref(userStore.user);

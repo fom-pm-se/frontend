@@ -1,5 +1,5 @@
 <template>
-  <v-container v-for="alert in alerts">
+  <v-container v-for="alert in alerts" :key="alert.title">
     <v-alert :type="alert.type" variant="tonal" density="compact" border>
       <v-alert-title>{{ alert.title }}</v-alert-title>
       {{ alert.message }}

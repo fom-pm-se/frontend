@@ -36,8 +36,7 @@
 import RegisterForm from "@/components/RegisterForm.vue";
 import LoginForm from "@/components/LoginForm.vue";
 import AlertWrapper from "@/components/common/AlertWrapper.vue";
-import {ref, onMounted, watch} from "vue";
-import {useAlertStore} from "@/store/AlertStore";
+import {onMounted, ref, watch} from "vue";
 import {RegisterRequest} from "@/model/request/RegisterRequest";
 import {onRegistrationRequest} from "@/service/RegistrationService";
 import {useTokenStore} from "@/store/TokenStore";
@@ -46,13 +45,12 @@ import router from "@/router";
 import {LoginRequest} from "@/model/request/LoginRequest";
 import {onLoginRequest} from "@/service/LoginService";
 
-const alertStore = useAlertStore();
 const tokenStore = useTokenStore();
 
-let name = "Login";
 let tab = ref("login");
 let isLoading = ref(false);
 const userStore = useUserStore();
+
 async function onRegistration(registerRequest: RegisterRequest) {
   try {
     isLoading.value = true;

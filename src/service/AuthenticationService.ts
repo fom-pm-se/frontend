@@ -1,7 +1,6 @@
-import axios, {AxiosResponse} from "axios";
+import axios from "axios";
 import {useAlertStore} from "@/store/AlertStore";
 import {Alert} from "@/model/store/Alert";
-import {tr} from "vuetify/locale";
 import {User} from "@/model/store/User";
 import {useTokenStore} from "@/store/TokenStore";
 import {useUserStore} from "@/store/UserStore";
@@ -15,9 +14,9 @@ export function isUsernameAvailable(username: string): Promise<any> {
   const alertStore = useAlertStore();
   return axios.get("http://localhost:8080/api/v1/auth/exists?username=" + username).catch(() => {
     const alert: Alert = {
-        title: "Benutzername kann nicht geprüft werden",
-        message: "Vermutlich liegt ein Netzwerkfehler vor. Bitte versuche es später erneut :(",
-        type: "error"
+      title: "Benutzername kann nicht geprüft werden",
+      message: "Vermutlich liegt ein Netzwerkfehler vor. Bitte versuche es später erneut :(",
+      type: "error"
     }
     alertStore.clearAlerts();
     alertStore.pushAlert(alert);
