@@ -12,7 +12,7 @@
   <v-navigation-drawer
     color="primary"
     v-model="drawer"
-    rounded
+    :location="isMobile.smAndUp ? 'left' : 'bottom'"
   >
     <v-container fluid class="text-center" v-if="isLoading">
       <v-progress-circular indeterminate :size="60"></v-progress-circular>
@@ -33,12 +33,25 @@
         class="my-2"
       >
       </v-list-item>
+      <v-divider></v-divider>
+      <v-list-item
+        v-for="item in adminItems"
+        :key="item.title"
+        link
+        :to="item.to"
+        :title="item.title"
+        :value="item.title"
+        :prepend-icon="item.icon"
+        class="my-2"
+        v-if="userStore.isAdministrator()"
+      >
+      </v-list-item>
     </v-list>
   </v-navigation-drawer>
 </template>
 
 <script lang="ts" setup>
-import {useTheme} from "vuetify";
+import {useTheme, useDisplay} from "vuetify";
 import {ref} from "vue";
 import {logout} from "@/service/AuthenticationService";
 import {useUserStore} from "@/store/UserStore";
@@ -50,10 +63,16 @@ const userStore = useUserStore();
 let user = ref(userStore.user);
 let isLoading = ref(false);
 
+const isMobile = ref(useDisplay());
+
 const items = [
   {title: 'Home', to: '/', icon: 'mdi-home'},
   {title: 'Profile', to: '/profiles', icon: 'mdi-account'},
   {title: 'Einstellungen', to: '/settings', icon: 'mdi-cog'},
+];
+
+const adminItems = [
+  {title: 'Administrator', to: '/administrator', icon: 'mdi-account-cog'},
 ];
 
 function toggleTheme() {

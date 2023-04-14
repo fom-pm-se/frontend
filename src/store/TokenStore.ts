@@ -13,11 +13,15 @@ export const useTokenStore = defineStore('tokenStore', {
   actions: {
     async authenticate(request: LoginRequest) {
       try {
+        this.flushToken();
         const response = await axios.post("http://localhost:8080/api/v1/auth/signin", request);
         this.token = response.data.token;
       } catch (e) {
         return Promise.reject(e);
       }
+    },
+    flushToken() {
+      this.token = "";
     }
   }
 });

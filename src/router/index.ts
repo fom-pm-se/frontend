@@ -23,16 +23,42 @@ const routes = [
         component: () => import('@/views/Settings.vue'),
       },
       {
-        path: 'profiles',
+        path: '/profiles',
         name: 'Profile',
         component: () => import('@/views/Profile.vue'),
+      },
+      {
+        path: '/administrator',
+        name: 'Administrator',
+        meta: {
+          adminAccess: true
+        },
+        component: () => import('@/views/Administrator.vue'),
+        children: [
+          {
+            path: 'users',
+            name: 'Users',
+            component: () => import('@/layouts/administrator/Users.vue'),
+          }
+        ]
       }
     ],
   },
   {
     path: '/login',
     name: 'Login',
-    component: () => import('@/layouts/default/Login.vue')
+    component: () => import('@/layouts/default/Login.vue'),
+    meta: {
+      anonymousAccess: true
+    }
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: () => import('@/components/common/NotFound.vue'),
+    meta: {
+      anonymousAccess: true
+    }
   }
 ]
 
@@ -45,9 +71,23 @@ router.beforeEach(async (to) => {
   const userStore = useUserStore();
   const alertStore = useAlertStore();
   await userStore.fetchUser();
+
+  if (to.meta.adminAccess && !(userStore.isAdministrator()))
+  {
+    const alert: Alert = {
+      title: "Keine Berechtigung.",
+      message: "Du hast keine Berechtigung diese Seite aufzurufen.",
+      type: "warning"
+    }
+    alertStore.clearAlerts();
+    alertStore.pushAlert(alert);
+
+    return {name: 'Home'}
+  }
+
   if (
     !userStore.user.enabled &&
-    to.name !== 'Login'
+    !to.meta.anonymousAccess
   ) {
     const alert: Alert = {
       title: "Du wurdest abgemeldet.",
@@ -58,6 +98,6 @@ router.beforeEach(async (to) => {
     alertStore.pushAlert(alert);
     return {name: 'Login'}
   }
-})
+});
 
 export default router

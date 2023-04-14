@@ -11,6 +11,10 @@ export const useAlertStore = defineStore('alertStore', {
     },
     pushAlert(alert: Alert) {
       this.alerts.push(alert);
+    },
+    setAlert(alert: Alert) {
+      this.clearAlerts();
+      this.pushAlert(alert);
     }
   }
 })

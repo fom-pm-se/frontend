@@ -24,6 +24,9 @@ export const useUserStore = defineStore('userStore', {
       this.user = {} as User;
       this.isUserLoaded = false;
       this.isUserLoggedIn = false;
+    },
+    isAdministrator() {
+        return this.user.role === 'ADMIN';
     }
   }
 });
