@@ -1,7 +1,6 @@
 // Composables
-import { createRouter, createWebHistory } from 'vue-router'
+import {createRouter, createWebHistory} from 'vue-router'
 import {useUserStore} from "@/store/UserStore";
-import {useTokenStore} from "@/store/TokenStore";
 
 const routes = [
   {
@@ -47,7 +46,7 @@ router.beforeEach(async (to, from) => {
     !userStore.user.enabled &&
     to.name !== 'Login'
   ) {
-    return { name: 'Login' }
+    return {name: 'Login'}
   }
 })
 

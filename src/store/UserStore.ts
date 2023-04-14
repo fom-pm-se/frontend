@@ -1,7 +1,5 @@
 import {defineStore} from "pinia";
 import {User} from "@/model/store/User";
-import {Alert} from "@/model/store/Alert";
-import {useAlertStore} from "@/store/AlertStore";
 import axios from "axios";
 
 export const useUserStore = defineStore('userStore', {
