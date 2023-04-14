@@ -7,7 +7,7 @@
         bg-color="primary"
       >
         <v-tab value="login">Einloggen</v-tab>
-        <v-tab value="register">Registrieren</v-tab>
+        <v-tab value="register" v-if="allowRegistration">Registrieren</v-tab>
       </v-tabs>
 
       <v-card-text>
@@ -42,7 +42,11 @@ import {onRegistrationRequest} from "@/service/RegistrationService";
 import {LoginRequest} from "@/model/request/LoginRequest";
 import {onLoginRequest} from "@/service/LoginService";
 import router from "@/router";
+import {useSettingsStore} from "@/store/SettingsStore";
 
+const settingsStore = useSettingsStore();
+let allowRegistrationSetting = settingsStore.findSetting("all_reg");
+let allowRegistration = ref(allowRegistrationSetting.active);
 
 let tab = ref("login");
 let isLoading = ref(false);

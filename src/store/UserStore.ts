@@ -16,8 +16,10 @@ export const useUserStore = defineStore('userStore', {
           this.isUserLoaded = true;
           this.isUserLoggedIn = true;
         }
+        return Promise.resolve();
       } catch (e) {
         this.flushUser();
+        return Promise.reject();
       }
     },
     flushUser() {

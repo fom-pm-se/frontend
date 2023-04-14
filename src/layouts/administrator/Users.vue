@@ -26,8 +26,8 @@
             <td>{{ user.lastname }}</td>
             <td>{{ formatRole(user.role) }}</td>
             <td>
-              <v-btn variant="text" icon="mdi-pencil" color="primary"></v-btn>
-              <v-btn variant="text" icon="mdi-lock" color="error"></v-btn>
+              <v-btn variant="text" icon="mdi-pencil" color="secondary" :disabled="isCurrentUser(user.username)"></v-btn>
+              <v-btn variant="text" icon="mdi-lock" color="error" :disabled="isCurrentUser(user.username)"></v-btn>
             </td>
           </tr>
           </tbody>
@@ -44,6 +44,7 @@
 import {useUserListStore} from "@/store/UserListStore";
 import {ref} from "vue";
 import AlertWrapper from "@/components/common/AlertWrapper.vue";
+import {useUserStore} from "@/store/UserStore";
 
 
 const userListStore = useUserListStore();
@@ -53,6 +54,13 @@ let isLoading = ref(true);
 onUserLoad().finally(() => {
   isLoading.value = false
 })
+
+const userStore = useUserStore();
+const user = ref(userStore.user);
+
+function isCurrentUser(username: string) {
+  return user.value.username === username;
+}
 
 async function onUserLoad() {
   await userListStore.fetchUserList();

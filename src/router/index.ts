@@ -3,6 +3,8 @@ import {createRouter, createWebHistory} from 'vue-router'
 import {useUserStore} from "@/store/UserStore";
 import {useAlertStore} from "@/store/AlertStore";
 import {Alert} from "@/model/store/Alert";
+import {useSettingsStore} from "@/store/SettingsStore";
+import {useTokenStore} from "@/store/TokenStore";
 
 const routes = [
   {
@@ -39,6 +41,10 @@ const routes = [
             path: 'users',
             name: 'Users',
             component: () => import('@/layouts/administrator/Users.vue'),
+          }, {
+            path: 'settings',
+            name: 'Settings',
+            component: () => import('@/layouts/administrator/ApplicationSettings.vue'),
           }
         ]
       }
@@ -70,10 +76,16 @@ const router = createRouter({
 router.beforeEach(async (to) => {
   const userStore = useUserStore();
   const alertStore = useAlertStore();
-  await userStore.fetchUser();
+  const settingsStore = useSettingsStore();
+  const tokenStore = useTokenStore();
 
-  if (to.meta.adminAccess && !(userStore.isAdministrator()))
-  {
+  await userStore.fetchUser().catch(() => {
+    userStore.flushUser();
+    tokenStore.flushToken();
+  });
+  await settingsStore.fetchSettingsShort();
+
+  if (to.meta.adminAccess && !(userStore.isAdministrator())) {
     const alert: Alert = {
       title: "Keine Berechtigung.",
       message: "Du hast keine Berechtigung diese Seite aufzurufen.",
