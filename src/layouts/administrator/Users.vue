@@ -20,7 +20,7 @@
           </tr>
           </thead>
           <tbody>
-          <tr v-for="(user) in userList">
+          <tr v-for="(user) in userList" :key="user.username">
             <td>{{ user.username }}</td>
             <td>{{ user.firstname }}</td>
             <td>{{ user.lastname }}</td>
@@ -48,8 +48,6 @@ import AlertWrapper from "@/components/common/AlertWrapper.vue";
 
 const userListStore = useUserListStore();
 let userList = ref(userListStore.userList);
-
-let dialog = ref(false);
 
 let isLoading = ref(true);
 onUserLoad().finally(() => {

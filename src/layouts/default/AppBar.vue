@@ -34,6 +34,8 @@
       >
       </v-list-item>
       <v-divider></v-divider>
+    </v-list>
+    <v-list v-if="userStore.isAdministrator()">
       <v-list-item
         v-for="item in adminItems"
         :key="item.title"
@@ -43,7 +45,6 @@
         :value="item.title"
         :prepend-icon="item.icon"
         class="my-2"
-        v-if="userStore.isAdministrator()"
       >
       </v-list-item>
     </v-list>
