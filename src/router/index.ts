@@ -1,6 +1,8 @@
 // Composables
 import {createRouter, createWebHistory} from 'vue-router'
 import {useUserStore} from "@/store/UserStore";
+import {useAlertStore} from "@/store/AlertStore";
+import {Alert} from "@/model/store/Alert";
 
 const routes = [
   {
@@ -41,11 +43,19 @@ const router = createRouter({
 
 router.beforeEach(async (to) => {
   const userStore = useUserStore();
+  const alertStore = useAlertStore();
   await userStore.fetchUser();
   if (
     !userStore.user.enabled &&
     to.name !== 'Login'
   ) {
+    const alert: Alert = {
+      title: "Du wurdest abgemeldet.",
+      message: "Bitte melde dich erneut an.",
+      type: "warning"
+    }
+    alertStore.clearAlerts();
+    alertStore.pushAlert(alert);
     return {name: 'Login'}
   }
 })

@@ -19,9 +19,25 @@ export function isUsernameAvailable(username: string): Promise<any> {
 }
 
 export function logout() {
+  // Flush Token Store
   const tokenStore = useTokenStore();
   tokenStore.token = "";
+
+  // Flush User Store
   const userStore = useUserStore();
   userStore.flushUser();
-  router.push("/login");
+
+  // Redirect to login page
+  router.push("/login").then(
+    () => {
+      const alert: Alert = {
+        title: "Erfolgreich abgemeldet",
+        message: "Du wurdest erfolgreich abgemeldet",
+        type: "success"
+      }
+      const alertStore = useAlertStore();
+      alertStore.clearAlerts();
+      alertStore.pushAlert(alert);
+    }
+  );
 }
