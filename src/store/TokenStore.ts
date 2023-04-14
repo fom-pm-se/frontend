@@ -1,4 +1,6 @@
 import {defineStore} from "pinia";
+import {LoginRequest} from "@/model/request/LoginRequest";
+import axios from "axios";
 
 export const useTokenStore = defineStore('tokenStore', {
   state: () => {
@@ -7,5 +9,15 @@ export const useTokenStore = defineStore('tokenStore', {
       return {token: token}
     }
     return {token: "" as string}
+  },
+  actions: {
+    async authenticate(request: LoginRequest) {
+      try {
+        const response = await axios.post("http://localhost:8080/api/v1/auth/signin", request);
+        this.token = response.data.token;
+      } catch (e) {
+        return Promise.reject(e);
+      }
+    }
   }
 });

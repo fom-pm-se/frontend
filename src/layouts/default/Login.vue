@@ -36,20 +36,16 @@
 import RegisterForm from "@/components/RegisterForm.vue";
 import LoginForm from "@/components/LoginForm.vue";
 import AlertWrapper from "@/components/common/AlertWrapper.vue";
-import {onMounted, ref, watch} from "vue";
+import {ref} from "vue";
 import {RegisterRequest} from "@/model/request/RegisterRequest";
 import {onRegistrationRequest} from "@/service/RegistrationService";
-import {useTokenStore} from "@/store/TokenStore";
-import {useUserStore} from "@/store/UserStore";
-import router from "@/router";
 import {LoginRequest} from "@/model/request/LoginRequest";
 import {onLoginRequest} from "@/service/LoginService";
+import router from "@/router";
 
-const tokenStore = useTokenStore();
 
 let tab = ref("login");
 let isLoading = ref(false);
-const userStore = useUserStore();
 
 async function onRegistration(registerRequest: RegisterRequest) {
   try {
@@ -57,40 +53,24 @@ async function onRegistration(registerRequest: RegisterRequest) {
     await onRegistrationRequest(registerRequest);
     backToLogin();
   } catch (e) {
-    console.log('what happened?', e);
   } finally {
     isLoading.value = false;
   }
 }
 
 async function onLogin(loginRequest: LoginRequest) {
-  try {
-    isLoading.value = true;
-    await onLoginRequest(loginRequest);
-  } catch (e) {
-    console.log('what happened?', e);
-  } finally {
+  isLoading.value = true;
+  await onLoginRequest(loginRequest).then(() => {
+    router.push("/");
+  }).catch(() => {
+  }).finally(() => {
     isLoading.value = false;
-  }
+  });
 }
 
 function backToLogin(): void {
   tab.value = "login";
 }
-
-onMounted(() => {
-  if (tokenStore.token.length > 0) {
-    userStore.fetchUser();
-    router.push('/');
-  } else {
-    watch(tokenStore, (newValue) => {
-      if (newValue.token.length > 0) {
-        userStore.fetchUser();
-        router.push('/');
-      }
-    })
-  }
-})
 
 </script>
 

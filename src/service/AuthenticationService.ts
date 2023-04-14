@@ -1,14 +1,9 @@
 import axios from "axios";
 import {useAlertStore} from "@/store/AlertStore";
 import {Alert} from "@/model/store/Alert";
-import {User} from "@/model/store/User";
 import {useTokenStore} from "@/store/TokenStore";
 import {useUserStore} from "@/store/UserStore";
 import router from "@/router";
-
-export function isAuthenticated() {
-  return !!localStorage.getItem("token");
-}
 
 export function isUsernameAvailable(username: string): Promise<any> {
   const alertStore = useAlertStore();
@@ -21,22 +16,6 @@ export function isUsernameAvailable(username: string): Promise<any> {
     alertStore.clearAlerts();
     alertStore.pushAlert(alert);
   });
-}
-
-export async function getCurrentUser(): Promise<User | null> {
-  try {
-    const response = await axios.get("http://localhost:8080/api/v1/user/me");
-    if (response.data) {
-      return Promise.resolve(response.data as User);
-    }
-    return Promise.reject("Der Benutzer ist nicht eingeloggt oder die Sitzung ist abgelaufen");
-  } catch (e) {
-    const tokenStore = useTokenStore();
-    tokenStore.token = "";
-    const userStore = useUserStore();
-    userStore.isUserLoggedIn = false;
-    return Promise.reject("Der Benutzer ist nicht eingeloggt oder die Sitzung ist abgelaufen");
-  }
 }
 
 export function logout() {

@@ -1,10 +1,15 @@
 <template>
   <alert-wrapper/>
   <v-container>
-    <h1>Home!</h1>
+    <h1>Settings!</h1>
   </v-container>
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
+
 import AlertWrapper from "@/components/common/AlertWrapper.vue";
 </script>
+
+<style scoped>
+
+</style>

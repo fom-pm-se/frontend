@@ -34,6 +34,8 @@ axios.interceptors.request.use(
 );
 
 // Sync token with local storage
+
+useTokenStore();
 watch(pinia.state,
   (state) => {
     localStorage.setItem('token', state.tokenStore.token);
