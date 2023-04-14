@@ -15,10 +15,9 @@ export const useUserStore = defineStore('userStore', {
           this.user = response.data as User;
           this.isUserLoaded = true;
           this.isUserLoggedIn = true;
-        } else {
-          console.log("User is not logged in.");
         }
       } catch (e) {
+        this.flushUser();
       }
     },
     flushUser() {

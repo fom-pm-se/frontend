@@ -52,7 +52,6 @@ async function onRegistration(registerRequest: RegisterRequest) {
     isLoading.value = true;
     await onRegistrationRequest(registerRequest);
     backToLogin();
-  } catch (e) {
   } finally {
     isLoading.value = false;
   }
