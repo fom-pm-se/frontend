@@ -43,7 +43,7 @@ const routes = [
             component: () => import('@/layouts/administrator/Users.vue'),
           }, {
             path: 'settings',
-            name: 'Settings',
+            name: 'ApplicationSettings',
             component: () => import('@/layouts/administrator/ApplicationSettings.vue'),
           }
         ]
