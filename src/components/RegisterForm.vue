@@ -3,12 +3,17 @@
     <v-col>
       <v-form :disabled="isLoading" @submit.prevent>
         <v-alert class="mb-5" type="error" v-if="usernameTaken" variant="outlined">Der Benutzer existiert bereits.</v-alert>
-        <v-text-field label="Vorname" v-model="firstname" :rules="[rules.required]"></v-text-field>
-        <v-text-field label="Nachname" v-model="lastname" :rules="[rules.required]"></v-text-field>
-        <v-text-field label="E-Mail" v-model="email" v-on:input="validateUsername" :rules="[rules.email, rules.required]"></v-text-field>
-        <v-text-field label="Passwort" type="password" v-model="password" :rules="[rules.min, rules.required]"></v-text-field>
-        <v-text-field label="Passwort wiederholen" type="password" v-model="passwordRepeat" :rules="[rules.mustMatchPassword]"></v-text-field>
-        <v-btn color="primary" :disabled="isLoading" :loading="isLoading" @click="onSubmit" type="submit">Registrieren</v-btn>
+        <v-text-field label="Vorname" v-model="firstname" 
+          :rules="[rules.required]"></v-text-field>
+        <v-text-field label="Nachname" v-model="lastname" 
+          :rules="[rules.required]"></v-text-field>
+        <v-text-field label="E-Mail" v-model="email" v-on:input="validateUsername" 
+          :rules="[rules.email, rules.required]"></v-text-field>
+        <v-text-field label="Passwort" type="password" v-model="password" 
+          :rules="[rules.min, rules.required, rules.requiresNumber, rules.requiresMixedCase]"></v-text-field>
+        <v-text-field label="Passwort wiederholen" type="password" v-model="passwordRepeat" 
+          :rules="[rules.mustMatchPassword]"></v-text-field>
+        <v-btn color="primary" :disabled="!isValid()" :loading="isLoading" @click="onSubmit" type="submit" >Registrieren</v-btn>
       </v-form>
     </v-col>
   </v-row>
@@ -38,10 +43,24 @@ export default defineComponent({
         email: (value: any) => /.+@.+\..+/.test(value) || 'Bitte gültige E-Mail eingeben.',
         min: (v: any) => v.length >= 8 || 'Mindestens 8 Zeichen.',
         mustMatchPassword: () => this.password === this.passwordRepeat || 'Passwörter stimmen nicht überein.',
+        requiresMixedCase: (value: any) => /[A-Z]/.test(value) && /[a-z]/.test(value) || 'Mindestens einen Kleinbuchstaben und einen Großbuchstaben enthalten.',
+        requiresNumber: (value: any) => /\d/.test(value) || 'Mindestens eine Zahl enthalten.',
       }
     }
   },
   methods: {
+    isValid(){
+      return false || (
+        this.firstname &&
+        this.lastname &&
+        /.+@.+\..+/.test(this.email) &&
+        /[A-Z]/.test(this.passwordRepeat) &&
+        /[a-z]/.test(this.passwordRepeat) &&
+        /\d/.test(this.passwordRepeat) &&
+        this.password == this.passwordRepeat &&
+        !this.usernameTaken
+        );
+    },
     validateUsername() {
       isUsernameAvailable(this.email).then((response) => {
         if (response.data) {
