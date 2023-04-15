@@ -1,28 +1,26 @@
 import {LoginRequest} from "@/model/request/LoginRequest";
 import {useTokenStore} from "@/store/TokenStore";
-import {useAlertStore} from "@/store/AlertStore";
-import axios, {AxiosResponse} from "axios";
-import {AuthResponse} from "@/model/response/AuthResponse";
+import {useUserStore} from "@/store/UserStore";
 import {Alert} from "@/model/store/Alert";
-import {ErrorResponse} from "@/model/response/ErrorResponse";
+import {useAlertStore} from "@/store/AlertStore";
 
 export async function onLoginRequest(request: LoginRequest) {
   const tokenStore = useTokenStore();
+  const userStore = useUserStore();
   const alertStore = useAlertStore();
+
+  alertStore.clearAlerts();
+
   try {
-    const response: AxiosResponse<any> = await axios.post("http://localhost:8080/api/v1/auth/signin", request);
-    const tokenResponse: AuthResponse = response.data as AuthResponse;
-    const token: string = tokenResponse.token;
-    tokenStore.token = token;
-  } catch (e: AxiosResponse<ErrorResponse> | any) {
-    const errorResponse: AxiosResponse<ErrorResponse> = e.response;
-    const errorMessage: string = errorResponse.data.errorMessage;
+    await tokenStore.authenticate(request);
+    await userStore.fetchUser();
+    return Promise.resolve();
+  } catch (e) {
     const alert: Alert = {
-      title: "Anmeldung fehlgeschlagen!",
-      message: errorMessage,
+      title: "Anmeldung fehlgeschlagen",
+      message: "Benutzername oder Passwort falsch",
       type: "error"
     }
-    alertStore.clearAlerts();
     alertStore.pushAlert(alert);
     return Promise.reject(e);
   }
