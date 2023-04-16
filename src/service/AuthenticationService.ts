@@ -41,3 +41,18 @@ export function logout() {
     }
   );
 }
+
+export async function lockUser() {
+  try {
+    await axios.post("http://localhost:8080/api/v1/user/lock/me");
+    logout();
+    window.location.reload();
+  } catch (e: any) {
+    const alertStore = useAlertStore();
+    alertStore.setAlert({
+      type: "error",
+      message: e.response.data.errorMessage || "Ein Fehler ist beim sperren des Benutzers aufgetreten.",
+      title: "Fehler."
+    });
+  }
+}
