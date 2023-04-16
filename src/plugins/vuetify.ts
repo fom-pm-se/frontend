@@ -12,10 +12,11 @@ import '@mdi/font/css/materialdesignicons.css'
 import 'vuetify/styles'
 
 // Composables
-import { createVuetify } from 'vuetify'
+import {createVuetify} from 'vuetify'
 
 export default createVuetify({
   theme: {
+    defaultTheme: isDarkMode() ? 'dark' : 'light',
     themes: {
       light: {
         dark: false,
@@ -42,3 +43,7 @@ export default createVuetify({
     },
   },
 })
+
+function isDarkMode() {
+  return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+}
