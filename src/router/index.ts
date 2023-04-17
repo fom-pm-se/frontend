@@ -5,6 +5,7 @@ import {useAlertStore} from "@/store/AlertStore";
 import {Alert} from "@/model/store/Alert";
 import {useSettingsStore} from "@/store/SettingsStore";
 import {useTokenStore} from "@/store/TokenStore";
+import {useGlobalPropertiesStore} from "@/store/GlobalPropertiesStore";
 
 const routes = [
   {
@@ -74,6 +75,8 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to) => {
+  const globalPropertiesStore = useGlobalPropertiesStore();
+  globalPropertiesStore.setLoading(true);
   const userStore = useUserStore();
   const alertStore = useAlertStore();
   const settingsStore = useSettingsStore();
@@ -110,6 +113,11 @@ router.beforeEach(async (to) => {
     alertStore.pushAlert(alert);
     return {name: 'Login'}
   }
+});
+
+router.afterEach(() => {
+  const globalPropertiesStore = useGlobalPropertiesStore();
+  globalPropertiesStore.setLoading(false);
 });
 
 export default router
