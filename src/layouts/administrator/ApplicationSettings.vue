@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-card>
+    <v-card flat>
       <v-card-title>
         Globale Einstellungen
       </v-card-title>
@@ -39,6 +39,8 @@
           color="secondary"
           :disabled="isLoading"
           @click="saveSettings"
+          prepend-icon="mdi-content-save"
+          variant="outlined"
         >
           Speichern
         </v-btn>

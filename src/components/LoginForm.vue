@@ -23,12 +23,14 @@
         <v-row class="mt-5">
           <v-col>
             <v-btn
-              color="primary"
+              color="secondary"
               type="submit"
+              variant="outlined"
               aria-label="submit"
               :disabled="!isValid()"
               :loading="$props.isLoading as boolean"
               @click="onSubmit()"
+              prepend-icon="mdi-login"
             >Einloggen
             </v-btn>
             <v-dialog
@@ -37,7 +39,7 @@
             >
               <template v-slot:activator="{ props }">
                 <v-btn
-                  color="primary"
+                  color="secondary"
                   v-bind="props"
                   variant="text"
                 >

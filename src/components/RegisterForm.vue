@@ -8,7 +8,7 @@
         <v-text-field label="E-Mail" v-model="email" v-on:input="validateUsername" :rules="[rules.email, rules.required]"></v-text-field>
         <v-text-field label="Passwort" type="password" v-model="password" :rules="[rules.min, rules.required]"></v-text-field>
         <v-text-field label="Passwort wiederholen" type="password" v-model="passwordRepeat" :rules="[rules.mustMatchPassword]"></v-text-field>
-        <v-btn color="primary" :disabled="isLoading" :loading="isLoading" @click="onSubmit" type="submit">Registrieren</v-btn>
+        <v-btn color="secondary" variant="outlined" :disabled="isLoading" :loading="isLoading" @click="onSubmit" type="submit" prepend-icon="mdi-check-circle">Registrieren</v-btn>
       </v-form>
     </v-col>
   </v-row>

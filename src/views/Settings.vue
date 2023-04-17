@@ -22,7 +22,7 @@
               v-model="user.lastname"
               label="Nachname"
             ></v-text-field>
-            <v-btn variant="text" color="secondary">Speichern</v-btn>
+            <v-btn variant="outlined" color="secondary" prepend-icon="mdi-content-save">Speichern</v-btn>
           </v-form>
         </v-expansion-panel-text>
       </v-expansion-panel>
@@ -30,7 +30,7 @@
         <v-expansion-panel-title>Erscheinungsbild</v-expansion-panel-title>
         <v-expansion-panel-text>
           <v-select :items="appearanceOptions" v-model="selectedAppearance"></v-select>
-          <v-btn variant="text" color="secondary">Speichern</v-btn>
+          <v-btn variant="outlined" prepend-icon="mdi-content-save" color="secondary">Speichern</v-btn>
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -45,7 +45,7 @@
               hint="mindestens 8 Zeichen lang, mindestens eine Zahl und einen Buchstaben"
             ></v-text-field>
             <v-text-field label="Neues Passwort wiederholen" type="password" v-model="changePasswordModel.passwordRepeat"></v-text-field>
-            <v-btn variant="text" type="button" color="secondary" @click="onChangePassword" :loading="isPasswordResetLoading">speichern</v-btn>
+            <v-btn variant="outlined" type="button" color="secondary" @click="onChangePassword" :loading="isPasswordResetLoading" prepend-icon="mdi-content-save">speichern</v-btn>
           </v-form>
         </v-expansion-panel-text>
       </v-expansion-panel>
