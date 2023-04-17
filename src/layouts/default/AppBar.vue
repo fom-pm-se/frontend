@@ -52,16 +52,17 @@
 </template>
 
 <script lang="ts" setup>
-import {useTheme, useDisplay} from "vuetify";
+import {useDisplay, useTheme} from "vuetify";
 import {ref} from "vue";
 import {logout} from "@/service/AuthenticationService";
 import {useUserStore} from "@/store/UserStore";
+import {storeToRefs} from "pinia";
 
 const theme = useTheme();
 let drawer = ref(false);
 
 const userStore = useUserStore();
-let user = ref(userStore.user);
+let {user} = storeToRefs(userStore);
 let isLoading = ref(false);
 
 const isMobile = ref(useDisplay());

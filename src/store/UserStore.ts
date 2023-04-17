@@ -1,6 +1,8 @@
 import {defineStore} from "pinia";
 import {User} from "@/model/store/User";
 import axios from "axios";
+import {UpdateUserRequest} from "@/model/request/UpdateUserRequest";
+import {requestUserChange} from "@/service/UserService";
 
 export const useUserStore = defineStore('userStore', {
   state: () => {
@@ -29,6 +31,19 @@ export const useUserStore = defineStore('userStore', {
     },
     isAdministrator() {
         return this.user.role === 'ADMIN';
+    },
+    async updateUser(updateUserRequest: UpdateUserRequest) {
+      try {
+        const response = await requestUserChange(updateUserRequest);
+        this.user = response as User;
+        await this.fetchUser();
+        return Promise.resolve();
+      } catch (e) {
+        return Promise.reject(e);
+      }
+    },
+    getCopyOfUser() : User {
+      return {...this.user};
     }
-  }
+  },
 });
