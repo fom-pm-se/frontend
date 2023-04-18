@@ -1,11 +1,12 @@
 import {ChangePasswordRequest} from "@/model/request/ChangePasswordRequest";
 import axios from "axios";
 import {useAlertStore} from "@/store/AlertStore";
+import {API_CHANGE_PASSWORD} from "@/axios/ApiConstants";
 
 export async function changePassword(changePasswordRequest: ChangePasswordRequest): Promise<void> {
   const alertStore = useAlertStore();
   try {
-    await axios.post("http://localhost:8080/api/v1/user/change-password", changePasswordRequest);
+    await axios.post(API_CHANGE_PASSWORD, changePasswordRequest);
     alertStore.setAlert({
       type: "success",
       message: "Dein Passwort wurde erfolgreich geändert.",

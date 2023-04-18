@@ -1,6 +1,7 @@
 import {defineStore} from "pinia";
 import {User} from "@/model/store/User";
 import axios from "axios";
+import {API_GET_ALL_USER} from "@/axios/ApiConstants";
 
 export const useUserListStore = defineStore('userListStore', {
   state: () => {
@@ -10,7 +11,7 @@ export const useUserListStore = defineStore('userListStore', {
     async fetchUserList() {
       let response;
       try {
-        response = await axios.get("http://localhost:8080/api/v1/user/all");
+        response = await axios.get(API_GET_ALL_USER);
         if (response.status === 200 && response.data) {
           this.userList = response.data as User[];
         }

@@ -4,10 +4,11 @@ import {Alert} from "@/model/store/Alert";
 import {useTokenStore} from "@/store/TokenStore";
 import {useUserStore} from "@/store/UserStore";
 import router from "@/router";
+import {API_EXISTS_USER, API_LOCK_CURRENT_USER} from "@/axios/ApiConstants";
 
 export function isUsernameAvailable(username: string): Promise<any> {
   const alertStore = useAlertStore();
-  return axios.get("http://localhost:8080/api/v1/auth/exists?username=" + username).catch(() => {
+  return axios.get(API_EXISTS_USER + username).catch(() => {
     const alert: Alert = {
       title: "Benutzername kann nicht geprüft werden",
       message: "Vermutlich liegt ein Netzwerkfehler vor. Bitte versuche es später erneut :(",
@@ -44,7 +45,7 @@ export function logout() {
 
 export async function lockUser() {
   try {
-    await axios.post("http://localhost:8080/api/v1/user/lock/me");
+    await axios.post(API_LOCK_CURRENT_USER);
     logout();
     window.location.reload();
   } catch (e: any) {

@@ -5,11 +5,12 @@ import {useTokenStore} from "@/store/TokenStore";
 import {ErrorResponse} from "@/model/response/ErrorResponse";
 import {useAlertStore} from "@/store/AlertStore";
 import {Alert} from "@/model/store/Alert";
+import {API_SIGN_UP} from "@/axios/ApiConstants";
 
 export async function registerUser(request: RegisterRequest) {
   const alertStore = useAlertStore();
   try {
-    await axios.post("http://localhost:8080/api/v1/auth/signup", request);
+    await axios.post(API_SIGN_UP, request);
     const alert: Alert = {
       title: "Registrierung erfolgreich!",
       message: "Der Benutzer '" + request.username + "' wurde erstellt!",
@@ -33,7 +34,7 @@ export async function onRegistrationRequest(request: RegisterRequest) {
   const tokenStore = useTokenStore();
   const alertStore = useAlertStore();
   try {
-    const response: AxiosResponse<any> = await axios.post("http://localhost:8080/api/v1/auth/signup", request);
+    const response: AxiosResponse<any> = await axios.post("v1/auth/signup", request);
     const tokenResponse: AuthResponse = response.data as AuthResponse;
     const token: string = tokenResponse.token;
     tokenStore.token = token;
