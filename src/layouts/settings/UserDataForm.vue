@@ -35,6 +35,7 @@ watch(props.user, () => {
 
 
 function onChangeUserSubmit() {
+  isChangeUserDialogLoading.value = true;
   userStore.updateUser(user.value as User).then(() => {
     emits('user-changed', true);
     userFormModified.value = false;
