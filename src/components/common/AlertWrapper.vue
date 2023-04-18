@@ -1,6 +1,6 @@
 <template>
   <v-container v-for="alert in alerts" :key="alert.title">
-    <v-alert :type="alert.type" variant="tonal" density="compact" border>
+    <v-alert :type="alert.type" variant="tonal" density="compact" border closable @click="alertStore.clearAlerts()" close-label="Schließen">
       <v-alert-title>{{ alert.title }}</v-alert-title>
       {{ alert.message }}
     </v-alert>
