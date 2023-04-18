@@ -18,58 +18,53 @@
     </v-col>
   </v-row>
 </template>
-<script lang="ts">
-import {isUsernameAvailable} from "@/service/AuthenticationService";
-import {defineComponent} from "vue";
+<script lang="ts" setup>
 
-export default defineComponent({
-  name: 'RegisterForm',
-  props: {
-    isLoading: {
-      type: Boolean,
-      default: false
+import {isUsernameAvailable} from "@/service/AuthenticationService";
+import {ref} from "vue";
+
+const isLoading = ref(false);
+
+const emit = defineEmits(['register']);
+
+const isFormValid = ref(false);
+const firstname = ref('');
+const lastname = ref('');
+const email = ref('');
+const password = ref('');
+const passwordRepeat = ref('');
+const usernameTaken = ref(false);
+const rules = {
+  required: (value: any) => !!value || 'Pflichtfeld.',
+  email: (value: any) => /.+@.+\..+/.test(value) || 'Bitte gültige E-Mail eingeben.',
+  min: (v: any) => v.length >= 8 || 'Mindestens 8 Zeichen.',
+  mustMatchPassword: () => password.value === passwordRepeat.value || 'Passwörter stimmen nicht überein.',
+  requiresMixedCase: (value: any) => /[A-Z]/.test(value) && /[a-z]/.test(value) || 'Mindestens einen Kleinbuchstaben und einen Großbuchstaben enthalten.',
+  requiresNumber: (value: any) => /\d/.test(value) || 'Mindestens eine Zahl enthalten.',
+} 
+
+function validateUsername() {
+  isUsernameAvailable(email.value).then((response) => {
+    if (response.data) {
+      usernameTaken.value = false;
+    } else {
+      usernameTaken.value = true;
     }
-  },
-  data() {
-    return {
-      isFormValid: false,
-      firstname: '',
-      lastname: '',
-      email: '',
-      password: '',
-      passwordRepeat: '',
-      usernameTaken: false,
-      rules: {
-        required: (value: any) => !!value || 'Pflichtfeld.',
-        email: (value: any) => /.+@.+\..+/.test(value) || 'Bitte gültige E-Mail eingeben.',
-        min: (v: any) => v.length >= 8 || 'Mindestens 8 Zeichen.',
-        mustMatchPassword: () => this.password === this.passwordRepeat || 'Passwörter stimmen nicht überein.',
-        requiresMixedCase: (value: any) => /[A-Z]/.test(value) && /[a-z]/.test(value) || 'Mindestens einen Kleinbuchstaben und einen Großbuchstaben enthalten.',
-        requiresNumber: (value: any) => /\d/.test(value) || 'Mindestens eine Zahl enthalten.',
-      }
-    }
-  },
-  methods: {
-    validateUsername() {
-      isUsernameAvailable(this.email).then((response) => {
-        if (response.data) {
-          this.usernameTaken = false;
-        } else {
-          this.usernameTaken = true;
-        }
-      });
-    },
-    onSubmit() {
-      const registerRequest = {
-        firstname: this.firstname,
-        lastname: this.lastname,
-        username: this.email,
-        password: this.password,
-      };
-      this.$emit('register', registerRequest);
-    }
-  }
-});
+  });
+}
+
+function onSubmit() {
+  const registerRequest = {
+    firstname: firstname.value,
+    lastname: lastname.value,
+    username: email.value,
+    password: password.value,
+  };
+  emit('register', registerRequest);
+}
+
+
+
 </script>
 
 <style scoped>
