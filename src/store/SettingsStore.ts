@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import {Settings, SettingsShort} from "@/model/store/Settings";
 import axios, {AxiosResponse} from "axios";
 import {UpdateSettingRequest} from "@/model/request/UpdateSettingRequest";
-import {API_GET_ALL_SETTINGS_LONG, API_GET_ALL_SETTINGS_SHORT} from "@/axios/ApiConstants";
+import {API_GET_ALL_SETTINGS_LONG, API_GET_ALL_SETTINGS_SHORT, API_SET_SINGLE_SETTING} from "@/axios/ApiConstants";
 
 export const useSettingsStore = defineStore('settingsStore', {
   state: () => (
@@ -25,6 +25,16 @@ export const useSettingsStore = defineStore('settingsStore', {
         }
       });
       const response = await axios.put(API_GET_ALL_SETTINGS_SHORT, settingsRequest);
+      if (response.status === 200) {
+        this.settings = response.data;
+      }
+    },
+    async saveSetting(setting: SettingsShort) {
+      const settingRequest: UpdateSettingRequest = {
+        technicalName: setting.technicalName,
+        active: setting.active
+      };
+      const response = await axios.put(API_SET_SINGLE_SETTING, settingRequest);
       if (response.status === 200) {
         this.settings = response.data;
       }

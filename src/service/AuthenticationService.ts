@@ -4,7 +4,7 @@ import {Alert} from "@/model/store/Alert";
 import {useTokenStore} from "@/store/TokenStore";
 import {useUserStore} from "@/store/UserStore";
 import router from "@/router";
-import {API_EXISTS_USER, API_LOCK_CURRENT_USER} from "@/axios/ApiConstants";
+import {API_EXISTS_USER, API_LOCK_CURRENT_USER, API_LOCK_USER} from "@/axios/ApiConstants";
 
 export function isUsernameAvailable(username: string): Promise<any> {
   const alertStore = useAlertStore();
@@ -55,5 +55,22 @@ export async function lockUser() {
       message: e.response.data.errorMessage || "Ein Fehler ist beim sperren des Benutzers aufgetreten.",
       title: "Fehler."
     });
+  }
+}
+
+export async function lockUserAdmin(username: string) {
+  try {
+    const userStore = useUserStore();
+    await axios.post(API_LOCK_USER + username);
+    await userStore.fetchUser();
+    return Promise.resolve();
+  } catch (e: any) {
+    const alertStore = useAlertStore();
+    alertStore.setAlert({
+      type: "error",
+      message: e.response.data.errorMessage || "Ein Fehler ist beim sperren des Benutzers aufgetreten.",
+      title: "Fehler."
+    });
+    return Promise.reject();
   }
 }
