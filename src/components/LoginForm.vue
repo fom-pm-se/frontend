@@ -17,7 +17,7 @@
           v-model="password"
           label="Passwort"
           aria-label="password"
-          :rules="[rules.required, rules.min]"
+          :rules="[rules.required]"
           type="password"
         ></v-text-field>
         <v-row class="mt-5">

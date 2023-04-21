@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-progress-circular indeterminate class="mx-auto mb-3" v-if="isLoading"></v-progress-circular>
-    <v-row>
+    <v-row class="mt-3">
       <v-card
         v-for="(user) in userList"
         :key="user"
@@ -39,12 +39,20 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+    <v-snackbar
+      v-model="snackbar"
+      :close-on-content-click="true"
+      :location="isMobile.xs ? 'bottom' : 'bottom left'"
+      timeout="900"
+    >
+      Gespeichert!
+    </v-snackbar>
   </v-row>
 </template>
 
 <script lang="ts" setup>
 import {useUserListStore} from "@/store/UserListStore";
-import {ref, unref} from "vue";
+import {ref} from "vue";
 import AlertWrapper from "@/components/common/AlertWrapper.vue";
 import {useUserStore} from "@/store/UserStore";
 import {RegisterRequest} from "@/model/request/RegisterRequest";
@@ -52,15 +60,17 @@ import {registerUser} from "@/service/RegistrationService";
 import {lockUserAdmin} from "@/service/AuthenticationService";
 import UserDataForm from "@/layouts/settings/UserDataForm.vue";
 import {User} from "@/model/store/User";
+import {useDisplay} from "vuetify";
 
 let userToEdit = {} as User;
 
-const activeInformationDialog = ref(undefined as number | undefined);
-
-const snackbar = ref(false as boolean);
 
 const userStore = useUserStore();
 const user = ref(userStore.user);
+
+const activeInformationDialog = ref(undefined as number | undefined);
+const snackbar = ref(false as boolean);
+const isMobile = ref(useDisplay())
 
 const editDialog = ref(false as boolean);
 
@@ -103,6 +113,7 @@ function onUserChanged(success: boolean) {
   if (success) {
     onUserLoad();
     editDialog.value = false;
+    snackbar.value = true;
   }
 }
 

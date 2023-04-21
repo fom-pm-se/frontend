@@ -4,7 +4,7 @@
     :key="setting.technicalName"
     cols="12"
     sm="4"
-    width="450"
+    max-width="450"
     class="mx-auto my-2"
     elevation="5"
     :loading="isLoading"
@@ -30,7 +30,8 @@
     </v-card-actions>
     <v-slide-x-transition>
       <v-card-text v-show="dialogActive">
-        id: {{ setting.technicalName }}
+        <h3>{{setting.technicalName}}</h3>
+        <p>{{ setting.description }}</p>
       </v-card-text>
     </v-slide-x-transition>
   </v-card>

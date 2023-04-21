@@ -8,19 +8,10 @@
     <v-snackbar
       v-model="snackbar"
       :close-on-content-click="true"
-      location="bottom left"
+      :location="!isMobile.xs ? 'bottom left' : 'bottom'"
       timeout="900"
     >
       Gespeichert!
-
-      <template v-slot:actions>
-        <v-btn
-          variant="text"
-          @click="snackbar = false"
-        >
-          Close
-        </v-btn>
-      </template>
     </v-snackbar>
   </div>
 </template>
@@ -33,6 +24,9 @@ import {useAlertStore} from "@/store/AlertStore";
 import {Alert} from "@/model/store/Alert";
 import {SettingsShort} from "@/model/store/Settings";
 import SettingToggle from "@/layouts/administrator/elements/SettingToggle.vue";
+import {useDisplay} from "vuetify";
+
+const isMobile = ref(useDisplay());
 
 let snackbar = ref(false as boolean);
 
