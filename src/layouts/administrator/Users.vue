@@ -27,7 +27,7 @@
         </v-card>
       </v-card>
     </v-row>
-    <v-dialog v-model="editDialog">
+    <v-dialog v-model="editDialog" :width="isMobile.xs ? '100%' : '500px'">
       <v-card>
         <alert-wrapper/>
         <v-card-title>
@@ -131,6 +131,7 @@ async function onRegistration(registerRequest: RegisterRequest) {
 function onLockUser(username: string) {
   lockUserAdmin(username).then(() => {
     onUserLoad();
+    snackbar.value = true;
   });
 }
 </script>
