@@ -3,17 +3,25 @@
     <v-col>
       <v-form v-model="isFormValid" :disabled="isLoading" @submit.prevent>
         <v-alert class="mb-5" type="error" v-if="usernameTaken" variant="outlined">Der Benutzer existiert bereits.</v-alert>
-        <v-text-field label="Vorname" v-model="firstname" 
+        <v-text-field label="Vorname" v-model="firstname"
           :rules="[rules.required]"></v-text-field>
-        <v-text-field label="Nachname" v-model="lastname" 
+        <v-text-field label="Nachname" v-model="lastname"
           :rules="[rules.required]"></v-text-field>
-        <v-text-field label="E-Mail" v-model="email" v-on:input="validateUsername" 
+        <v-text-field label="E-Mail" v-model="email" v-on:input="validateUsername"
           :rules="[rules.email, rules.required]"></v-text-field>
-        <v-text-field label="Passwort" type="password" v-model="password" 
+        <v-text-field label="Passwort" type="password" v-model="password"
           :rules="[rules.min, rules.required, rules.requiresNumber, rules.requiresMixedCase]"></v-text-field>
-        <v-text-field label="Passwort wiederholen" type="password" v-model="passwordRepeat" 
+        <v-text-field label="Passwort wiederholen" type="password" v-model="passwordRepeat"
           :rules="[rules.mustMatchPassword]"></v-text-field>
         <v-btn color="primary" :disabled="!isFormValid" :loading="isLoading" @click="onSubmit" type="submit" >Registrieren</v-btn>
+=========
+        <v-text-field label="Vorname" v-model="firstname" :rules="[rules.required]"></v-text-field>
+        <v-text-field label="Nachname" v-model="lastname" :rules="[rules.required]"></v-text-field>
+        <v-text-field label="E-Mail" v-model="email" v-on:input="validateUsername" :rules="[rules.email, rules.required]"></v-text-field>
+        <v-text-field label="Passwort" type="password" v-model="password" :rules="[rules.min, rules.required]"></v-text-field>
+        <v-text-field label="Passwort wiederholen" type="password" v-model="passwordRepeat" :rules="[rules.mustMatchPassword]"></v-text-field>
+        <v-btn color="secondary" variant="outlined" :disabled="isLoading" :loading="isLoading" @click="onSubmit" type="submit" prepend-icon="mdi-check-circle">Registrieren</v-btn>
+>>>>>>>>> Temporary merge branch 2
       </v-form>
     </v-col>
   </v-row>
