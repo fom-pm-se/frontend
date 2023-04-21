@@ -10,6 +10,7 @@
         width="300"
         class="mx-auto my-2"
         elevation="5"
+        :disabled="userStore.user.username === user.username"
       >
         <v-alert icon="mdi-lock" v-if="!user.enabled" type="warning"> Gesperrt</v-alert>
         <v-alert icon="mdi-account-check" v-else> {{ formatRole(user.role) }}</v-alert>
@@ -17,19 +18,17 @@
           {{ user.firstname }} {{ user.lastname }}
         </v-card-title>
         <v-card-subtitle>{{ user.username }}</v-card-subtitle>
-        <v-card rounded="0" elevation="0">
           <v-card-actions>
             <v-btn icon="mdi-pencil" @click="openEditDialog(user)"></v-btn>
+            <v-btn icon="mdi-form-textbox-password" v-if="user.role === 'USER'"></v-btn>
             <v-btn icon="mdi-lock" v-if="user.enabled" color="error" @click="onLockUser(user.username)"></v-btn>
             <v-btn icon="mdi-lock-open" v-else color="secondary" @click="onLockUser(user.username)"></v-btn>
             <v-btn icon="mdi-delete" color="error"></v-btn>
           </v-card-actions>
-        </v-card>
       </v-card>
     </v-row>
     <v-dialog v-model="editDialog" :width="isMobile.xs ? '100%' : '500px'">
       <v-card>
-        <alert-wrapper/>
         <v-card-title>
           <h2>Bearbeiten</h2>
         </v-card-title>

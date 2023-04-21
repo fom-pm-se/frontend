@@ -9,10 +9,12 @@
     ></v-text-field>
     <v-text-field
       v-model="user.firstname"
+      :rules="REQUIRED_RULESET"
       label="Vorname"
     ></v-text-field>
     <v-text-field
       v-model="user.lastname"
+      :rules="REQUIRED_RULESET"
       label="Nachname"
     ></v-text-field>
     <v-btn :loading="isChangeUserDialogLoading" variant="outlined" color="secondary" prepend-icon="mdi-content-save" @click="onChangeUserSubmit">Speichern</v-btn>
@@ -24,6 +26,7 @@ import {ref, defineProps, defineEmits, watch} from "vue";
 import {User} from "@/model/store/User";
 import {useUserStore} from "@/store/UserStore";
 import AlertWrapper from "@/components/common/AlertWrapper.vue";
+import {REQUIRED_RULESET} from "@/model/validation/ValidationRulesets";
 
 let isChangeUserDialogLoading = ref(false as boolean);
 
@@ -36,7 +39,6 @@ let userFormModified = ref(false as boolean);
 watch(props.user, () => {
   userFormModified.value = true;
 });
-
 
 function onChangeUserSubmit() {
   isChangeUserDialogLoading.value = true;
