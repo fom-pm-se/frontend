@@ -2,6 +2,11 @@
   <v-app-bar color="primary">
     <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
     <v-spacer></v-spacer>
+    <div v-if="isLoading">
+      Lade Daten...
+      <v-progress-circular indeterminate class="ml-3"></v-progress-circular>
+    </div>
+    <v-spacer></v-spacer>
     <v-btn icon @click="toggleTheme">
       <v-icon>{{ theme.global.current.value.dark ? 'mdi-lightbulb-on' : 'mdi-lightbulb' }}</v-icon>
     </v-btn>
@@ -14,10 +19,7 @@
     v-model="drawer"
     :location="isMobile.smAndUp ? 'left' : 'bottom'"
   >
-    <v-container fluid class="text-center" v-if="isLoading">
-      <v-progress-circular indeterminate :size="60"></v-progress-circular>
-    </v-container>
-    <v-list dense v-if="!isLoading">
+    <v-list dense>
       <v-list-item>
         <v-list-item-title>{{ user.firstname }} {{ user.lastname }}</v-list-item-title>
         <v-list-item-subtitle>{{ user.username }}</v-list-item-subtitle>
@@ -52,17 +54,21 @@
 </template>
 
 <script lang="ts" setup>
-import {useTheme, useDisplay} from "vuetify";
+import {useDisplay, useTheme} from "vuetify";
 import {ref} from "vue";
 import {logout} from "@/service/AuthenticationService";
 import {useUserStore} from "@/store/UserStore";
+import {storeToRefs} from "pinia";
+import {useGlobalPropertiesStore} from "@/store/GlobalPropertiesStore";
+
+const globalPropertiesStore = useGlobalPropertiesStore();
+const { isLoading } = storeToRefs(globalPropertiesStore);
 
 const theme = useTheme();
 let drawer = ref(false);
 
 const userStore = useUserStore();
-let user = ref(userStore.user);
-let isLoading = ref(false);
+let {user} = storeToRefs(userStore);
 
 const isMobile = ref(useDisplay());
 

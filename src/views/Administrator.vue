@@ -1,6 +1,8 @@
 <template>
   <administrator-bar/>
-  <router-view/>
+  <v-container fluid>
+    <router-view/>
+  </v-container>
 </template>
 
 <script lang="ts" setup>

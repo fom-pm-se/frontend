@@ -15,10 +15,10 @@ export async function onLoginRequest(request: LoginRequest) {
     await tokenStore.authenticate(request);
     await userStore.fetchUser();
     return Promise.resolve();
-  } catch (e) {
+  } catch (e: any) {
     const alert: Alert = {
       title: "Anmeldung fehlgeschlagen",
-      message: "Benutzername oder Passwort falsch",
+      message: e.response.data.errorMessage || "Ein Fehler ist beim anmelden aufgetreten.",
       type: "error"
     }
     alertStore.pushAlert(alert);

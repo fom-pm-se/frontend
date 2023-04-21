@@ -1,6 +1,9 @@
 import {defineStore} from "pinia";
 import {User} from "@/model/store/User";
 import axios from "axios";
+import {UpdateUserRequest} from "@/model/request/UpdateUserRequest";
+import {requestUserChange} from "@/service/UserService";
+import {API_GET_CURRENT_USER} from "@/axios/ApiConstants";
 
 export const useUserStore = defineStore('userStore', {
   state: () => {
@@ -10,7 +13,7 @@ export const useUserStore = defineStore('userStore', {
     async fetchUser() {
       let response;
       try {
-        response = await axios.get("http://localhost:8080/api/v1/user/me");
+        response = await axios.get(API_GET_CURRENT_USER);
         if (response.status === 200 && response.data) {
           this.user = response.data as User;
           this.isUserLoaded = true;
@@ -29,6 +32,19 @@ export const useUserStore = defineStore('userStore', {
     },
     isAdministrator() {
         return this.user.role === 'ADMIN';
+    },
+    async updateUser(updateUserRequest: UpdateUserRequest) {
+      try {
+        const response = await requestUserChange(updateUserRequest);
+        this.user = response as User;
+        await this.fetchUser();
+        return Promise.resolve();
+      } catch (e) {
+        return Promise.reject(e);
+      }
+    },
+    getCopyOfUser() : User {
+      return {...this.user};
     }
-  }
+  },
 });
