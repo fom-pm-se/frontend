@@ -57,6 +57,8 @@ let userToEdit = {} as User;
 
 const activeInformationDialog = ref(undefined as number | undefined);
 
+const snackbar = ref(false as boolean);
+
 const userStore = useUserStore();
 const user = ref(userStore.user);
 

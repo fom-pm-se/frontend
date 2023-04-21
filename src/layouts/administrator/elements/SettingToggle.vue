@@ -38,12 +38,14 @@
 
 <script lang="ts" setup>
 import {Settings, SettingsShort} from "@/model/store/Settings";
-import {ref} from "vue";
+import {defineEmits, ref} from "vue";
 import {useSettingsStore} from "@/store/SettingsStore";
 
 let isLoading = ref(false as boolean);
 const settingsStore = useSettingsStore();
 const dialogActive = ref(false as boolean);
+const emits = defineEmits(['setting-changed']);
+
 
 const props = defineProps<{
   setting: Settings,
@@ -52,9 +54,16 @@ const props = defineProps<{
 function saveSetting(setting: SettingsShort) {
   isLoading.value = true;
   setting.active = !setting.active;
-  settingsStore.saveSetting(setting).finally(() => {
-    isLoading.value = false;
-  });
+  settingsStore.saveSetting(setting)
+    .then(() => {
+      emits('setting-changed', true);
+    })
+    .catch(() => {
+      emits('setting-changed', false);
+    })
+    .finally(() => {
+      isLoading.value = false;
+    });
 }
 </script>
 

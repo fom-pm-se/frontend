@@ -70,7 +70,6 @@ async function onLogin(loginRequest: LoginRequest) {
   loginLoading.value = true;
   await onLoginRequest(loginRequest).then(() => {
     router.push("/");
-  }).catch(() => {
   }).finally(() => {
     loginLoading.value = false;
   });
