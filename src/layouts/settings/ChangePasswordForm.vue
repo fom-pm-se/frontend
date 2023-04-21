@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-import {defineEmits, ref} from "vue";
+import {ref} from "vue";
 import {changePassword} from "@/service/PasswordService";
 import {ChangePasswordRequest} from "@/model/request/ChangePasswordRequest";
 import {ENTER_PASSWORD_RULESET, NEW_PASSWORD_RULESET} from "@/model/validation/ValidationRulesets";
