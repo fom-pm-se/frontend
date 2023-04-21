@@ -19,22 +19,32 @@ const routes = [
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
         component: () => import(/* webpackChunkName: "home" */ '@/views/Home.vue'),
+        meta: {
+          name: 'Home'
+        }
       },
       {
         path: '/settings',
         name: 'Settings',
         component: () => import('@/views/Settings.vue'),
+        meta: {
+          name: 'Einstellungen'
+        }
       },
       {
         path: '/profiles',
         name: 'Profile',
         component: () => import('@/views/Profile.vue'),
+        meta: {
+          name: 'Profil'
+        }
       },
       {
         path: '/administrator',
         name: 'Administrator',
         meta: {
-          adminAccess: true
+          adminAccess: true,
+          name: 'Administrator'
         },
         component: () => import('@/views/Administrator.vue'),
         children: [
@@ -42,15 +52,27 @@ const routes = [
             path: '',
             name: 'AdministratorHome',
             component: () => import('@/layouts/administrator/AdministratorDefault.vue'),
+            meta: {
+              adminAccess: true,
+              name: 'Administrator'
+            }
           },
           {
             path: 'users',
             name: 'Users',
             component: () => import('@/layouts/administrator/Users.vue'),
+            meta: {
+              adminAccess: true,
+              name: 'Benutzer'
+            }
           }, {
             path: 'settings',
             name: 'ApplicationSettings',
             component: () => import('@/layouts/administrator/ApplicationSettings.vue'),
+            meta: {
+              adminAccess: true,
+              name: 'Einstellungen'
+            }
           }
         ]
       }
@@ -61,6 +83,7 @@ const routes = [
     name: 'Login',
     component: () => import('@/layouts/default/Login.vue'),
     meta: {
+      name: 'Login',
       anonymousAccess: true
     }
   },
@@ -69,6 +92,7 @@ const routes = [
     name: 'NotFound',
     component: () => import('@/components/common/NotFound.vue'),
     meta: {
+      name: '404',
       anonymousAccess: true
     }
   }
@@ -120,9 +144,11 @@ router.beforeEach(async (to) => {
   }
 });
 
-router.afterEach(() => {
+const APP_NAME = 'FOM-PM-SE-CRM'
+router.afterEach((to) => {
   const globalPropertiesStore = useGlobalPropertiesStore();
   globalPropertiesStore.setLoading(false);
+  document.title = to.meta.name + " | " + APP_NAME;
 });
 
 export default router
