@@ -3,7 +3,6 @@ import {useTokenStore} from "@/store/TokenStore";
 import {useUserStore} from "@/store/UserStore";
 import {Alert} from "@/model/store/Alert";
 import {useAlertStore} from "@/store/AlertStore";
-import {AxiosError} from "axios";
 
 export async function onLoginRequest(request: LoginRequest) {
   const tokenStore = useTokenStore();

@@ -18,13 +18,13 @@
           {{ user.firstname }} {{ user.lastname }}
         </v-card-title>
         <v-card-subtitle>{{ user.username }}</v-card-subtitle>
-          <v-card-actions>
-            <v-btn icon="mdi-pencil" @click="openEditDialog(user)"></v-btn>
-            <v-btn icon="mdi-form-textbox-password" v-if="user.role === 'USER'"></v-btn>
-            <v-btn icon="mdi-lock" v-if="user.enabled" color="error" @click="onLockUser(user.username)"></v-btn>
-            <v-btn icon="mdi-lock-open" v-else color="secondary" @click="onLockUser(user.username)"></v-btn>
-            <v-btn icon="mdi-delete" color="error"></v-btn>
-          </v-card-actions>
+        <v-card-actions>
+          <v-btn icon="mdi-pencil" @click="openEditDialog(user)"></v-btn>
+          <v-btn icon="mdi-form-textbox-password" v-if="user.role === 'USER'"></v-btn>
+          <v-btn icon="mdi-lock" v-if="user.enabled" color="error" @click="onLockUser(user.username)"></v-btn>
+          <v-btn icon="mdi-lock-open" v-else color="secondary" @click="onLockUser(user.username)"></v-btn>
+          <v-btn icon="mdi-delete" color="error"></v-btn>
+        </v-card-actions>
       </v-card>
     </v-row>
     <v-dialog v-model="editDialog" :width="isMobile.xs ? '100%' : '500px'">
@@ -52,10 +52,7 @@
 <script lang="ts" setup>
 import {useUserListStore} from "@/store/UserListStore";
 import {ref} from "vue";
-import AlertWrapper from "@/components/common/AlertWrapper.vue";
 import {useUserStore} from "@/store/UserStore";
-import {RegisterRequest} from "@/model/request/RegisterRequest";
-import {registerUser} from "@/service/RegistrationService";
 import {lockUserAdmin} from "@/service/AuthenticationService";
 import UserDataForm from "@/layouts/settings/UserDataForm.vue";
 import {User} from "@/model/store/User";
@@ -65,9 +62,7 @@ let userToEdit = {} as User;
 
 
 const userStore = useUserStore();
-const user = ref(userStore.user);
 
-const activeInformationDialog = ref(undefined as number | undefined);
 const snackbar = ref(false as boolean);
 const isMobile = ref(useDisplay())
 
@@ -84,20 +79,10 @@ userListStore.fetchUserList().then(() => {
   userList.value = userListStore.userList;
 });
 
-const registerUserDialog = ref(false as boolean);
-
 let isLoading = ref(true);
 onUserLoad().finally(() => {
   isLoading.value = false
 })
-
-function toggleDialog(index: number) {
-  if (activeInformationDialog.value === index) {
-    activeInformationDialog.value = undefined;
-  } else {
-    activeInformationDialog.value = index;
-  }
-}
 
 async function onUserLoad() {
   await userListStore.fetchUserList();
@@ -113,17 +98,6 @@ function onUserChanged(success: boolean) {
     onUserLoad();
     editDialog.value = false;
     snackbar.value = true;
-  }
-}
-
-async function onRegistration(registerRequest: RegisterRequest) {
-  try {
-    isLoading.value = true;
-    await registerUser(registerRequest);
-    registerUserDialog.value = false;
-    await onUserLoad();
-  } finally {
-    isLoading.value = false;
   }
 }
 

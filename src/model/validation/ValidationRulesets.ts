@@ -1,4 +1,4 @@
-import {EMAIL, MINLENGTH, PASSWORD, PASSWORD_CONFIRM, REQUIRED} from "@/model/validation/FieldValidation";
+import {EMAIL, MINLENGTH, PASSWORD, REQUIRED} from "@/model/validation/FieldValidation";
 
 export const NEW_PASSWORD_RULESET = [
   (value: any) => REQUIRED(value),

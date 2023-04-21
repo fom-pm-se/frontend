@@ -30,7 +30,7 @@
     </v-card-actions>
     <v-slide-x-transition>
       <v-card-text v-show="dialogActive">
-        <h3>{{setting.technicalName}}</h3>
+        <h3>{{ setting.technicalName }}</h3>
         <p>{{ setting.description }}</p>
       </v-card-text>
     </v-slide-x-transition>
@@ -47,10 +47,9 @@ const settingsStore = useSettingsStore();
 const dialogActive = ref(false as boolean);
 const emits = defineEmits(['setting-changed']);
 
-
-const props = defineProps<{
-  setting: Settings,
-}>()
+defineProps<{
+  setting: Settings;
+}>();
 
 function saveSetting(setting: SettingsShort) {
   isLoading.value = true;

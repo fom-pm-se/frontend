@@ -25,7 +25,6 @@
 import {ref, defineProps, defineEmits, watch} from "vue";
 import {User} from "@/model/store/User";
 import {useUserStore} from "@/store/UserStore";
-import AlertWrapper from "@/components/common/AlertWrapper.vue";
 import {REQUIRED_RULESET} from "@/model/validation/ValidationRulesets";
 
 let isChangeUserDialogLoading = ref(false as boolean);

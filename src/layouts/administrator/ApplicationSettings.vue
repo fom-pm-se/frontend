@@ -1,6 +1,11 @@
 <template>
   <v-row>
-    <v-col v-for="setting in settings" no-gutters>
+    <v-container>
+      <h1>Anwendungseinstellungen</h1>
+    </v-container>
+  </v-row>
+  <v-row>
+    <v-col v-for="setting in settings" no-gutters :key="setting.technicalName">
       <setting-toggle :setting="setting" @setting-changed="showSnackbar"></setting-toggle>
     </v-col>
   </v-row>
@@ -19,10 +24,6 @@
 <script lang="ts" setup>
 import {useSettingsStore} from "@/store/SettingsStore";
 import {ref} from "vue";
-import AlertWrapper from "@/components/common/AlertWrapper.vue";
-import {useAlertStore} from "@/store/AlertStore";
-import {Alert} from "@/model/store/Alert";
-import {SettingsShort} from "@/model/store/Settings";
 import SettingToggle from "@/layouts/administrator/elements/SettingToggle.vue";
 import {useDisplay} from "vuetify";
 

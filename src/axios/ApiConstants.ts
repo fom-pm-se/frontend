@@ -1,5 +1,3 @@
-import {User} from "@/model/store/User";
-
 export const API_SIGN_UP = '/v1/auth/signup'
 export const API_SIGN_IN = '/v1/auth/signin'
 
