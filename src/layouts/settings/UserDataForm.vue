@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts" setup>
-import {ref, defineProps, defineEmits, watch} from "vue";
+import {ref, defineEmits, watch} from "vue";
 import {User} from "@/model/store/User";
 import {useUserStore} from "@/store/UserStore";
 import {REQUIRED_RULESET} from "@/model/validation/ValidationRulesets";

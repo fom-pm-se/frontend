@@ -39,7 +39,7 @@
 
 <script lang="ts" setup>
 import {Settings, SettingsShort} from "@/model/store/Settings";
-import {defineEmits, ref} from "vue";
+import {ref} from "vue";
 import {useSettingsStore} from "@/store/SettingsStore";
 
 let isLoading = ref(false as boolean);
