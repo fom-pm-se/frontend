@@ -4,7 +4,7 @@
     <v-row class="mt-3">
       <v-card
         v-for="(user) in userList"
-        :key="user"
+        :key="user.username"
         cols="12"
         sm="3"
         width="300"
