@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col>
-      <v-form v-model="isFormValid" :disabled="isLoading" @submit.prevent>
+      <v-form v-model="isFormValid" :disabled="props.isLoading" @submit.prevent>
         <v-alert class="mb-5" type="error" v-if="usernameTaken" variant="outlined">Der Benutzer existiert bereits.</v-alert>
         <v-text-field label="Vorname" v-model="firstname" 
           :rules="[rules.required]"></v-text-field>
@@ -13,7 +13,7 @@
           :rules="[rules.min, rules.required, rules.requiresNumber, rules.requiresMixedCase]"></v-text-field>
         <v-text-field label="Passwort wiederholen" type="password" v-model="passwordRepeat" 
           :rules="[rules.mustMatchPassword]"></v-text-field>
-        <v-btn color="primary" :disabled="!isFormValid" :loading="isLoading" @click="onSubmit" type="submit" >Registrieren</v-btn>
+        <v-btn color="primary" :disabled="!isFormValid" :loading="props.isLoading" @click="onSubmit" type="submit" >Registrieren</v-btn>
       </v-form>
     </v-col>
   </v-row>
@@ -23,17 +23,22 @@
 import {isUsernameAvailable} from "@/service/AuthenticationService";
 import {ref} from "vue";
 
-const isLoading = ref(false);
+const props = defineProps({
+  isLoading: {
+    type: Boolean,
+    required: true
+  }
+})
 
 const emit = defineEmits(['register']);
 
-const isFormValid = ref(false);
-const firstname = ref('');
-const lastname = ref('');
-const email = ref('');
-const password = ref('');
-const passwordRepeat = ref('');
-const usernameTaken = ref(false);
+const isFormValid = ref(false as boolean);
+const firstname = ref('' as string);
+const lastname = ref('' as string);
+const email = ref('' as string);
+const password = ref('' as string);
+const passwordRepeat = ref('' as string);
+const usernameTaken = ref(false as boolean);
 const rules = {
   required: (value: any) => !!value || 'Pflichtfeld.',
   email: (value: any) => /.+@.+\..+/.test(value) || 'Bitte gültige E-Mail eingeben.',
@@ -43,7 +48,7 @@ const rules = {
   requiresNumber: (value: any) => /\d/.test(value) || 'Mindestens eine Zahl enthalten.',
 } 
 
-function validateUsername() {
+function validateUsername(): void {
   isUsernameAvailable(email.value).then((response) => {
     if (response.data) {
       usernameTaken.value = false;
