@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col>
-      <v-form v-model="isFormValid" :disabled="isLoading" @submit.prevent>
+      <v-form v-model="isFormValid" :disabled="props.isLoading" @submit.prevent>
         <v-alert class="mb-5" type="error" v-if="usernameTaken" variant="outlined">Der Benutzer existiert bereits.</v-alert>
         <v-text-field label="Vorname" v-model="firstname"
           :rules="[rules.required]"></v-text-field>
@@ -13,63 +13,63 @@
           :rules="[rules.min, rules.required, rules.requiresNumber, rules.requiresMixedCase]"></v-text-field>
         <v-text-field label="Passwort wiederholen" type="password" v-model="passwordRepeat"
           :rules="[rules.mustMatchPassword]"></v-text-field>
-        <v-btn color="primary" :disabled="!isFormValid" :loading="isLoading" @click="onSubmit" type="submit" >Registrieren</v-btn>
+        <v-btn color="primary" :disabled="!isFormValid" :loading="props.isLoading" @click="onSubmit" type="submit" >Registrieren</v-btn>
       </v-form>
     </v-col>
   </v-row>
 </template>
-<script lang="ts">
-import {isUsernameAvailable} from "@/service/AuthenticationService";
-import {defineComponent} from "vue";
+<script lang="ts" setup>
 
-export default defineComponent({
-  name: 'RegisterForm',
-  props: {
-    isLoading: {
-      type: Boolean,
-      default: false
-    }
-  },
-  data() {
-    return {
-      isFormValid: false,
-      firstname: '',
-      lastname: '',
-      email: '',
-      password: '',
-      passwordRepeat: '',
-      usernameTaken: false,
-      rules: {
-        required: (value: any) => !!value || 'Pflichtfeld.',
-        email: (value: any) => /.+@.+\..+/.test(value) || 'Bitte gültige E-Mail eingeben.',
-        min: (v: any) => v.length >= 8 || 'Mindestens 8 Zeichen.',
-        mustMatchPassword: () => this.password === this.passwordRepeat || 'Passwörter stimmen nicht überein.',
-        requiresMixedCase: (value: any) => /[A-Z]/.test(value) && /[a-z]/.test(value) || 'Mindestens einen Kleinbuchstaben und einen Großbuchstaben enthalten.',
-        requiresNumber: (value: any) => /\d/.test(value) || 'Mindestens eine Zahl enthalten.',
-      }
-    }
-  },
-  methods: {
-    validateUsername() {
-      isUsernameAvailable(this.email).then((response) => {
-        if (response.data) {
-          this.usernameTaken = false;
-        } else {
-          this.usernameTaken = true;
-        }
-      });
-    },
-    onSubmit() {
-      const registerRequest = {
-        firstname: this.firstname,
-        lastname: this.lastname,
-        username: this.email,
-        password: this.password,
-      };
-      this.$emit('register', registerRequest);
-    }
+import {isUsernameAvailable} from "@/service/AuthenticationService";
+import {ref} from "vue";
+
+const props = defineProps({
+  isLoading: {
+    type: Boolean,
+    required: true
   }
-});
+})
+
+const emit = defineEmits(['register']);
+
+const isFormValid = ref(false as boolean);
+const firstname = ref('' as string);
+const lastname = ref('' as string);
+const email = ref('' as string);
+const password = ref('' as string);
+const passwordRepeat = ref('' as string);
+const usernameTaken = ref(false as boolean);
+const rules = {
+  required: (value: any) => !!value || 'Pflichtfeld.',
+  email: (value: any) => /.+@.+\..+/.test(value) || 'Bitte gültige E-Mail eingeben.',
+  min: (v: any) => v.length >= 8 || 'Mindestens 8 Zeichen.',
+  mustMatchPassword: () => password.value === passwordRepeat.value || 'Passwörter stimmen nicht überein.',
+  requiresMixedCase: (value: any) => /[A-Z]/.test(value) && /[a-z]/.test(value) || 'Mindestens einen Kleinbuchstaben und einen Großbuchstaben enthalten.',
+  requiresNumber: (value: any) => /\d/.test(value) || 'Mindestens eine Zahl enthalten.',
+} 
+
+function validateUsername(): void {
+  isUsernameAvailable(email.value).then((response) => {
+    if (response.data) {
+      usernameTaken.value = false;
+    } else {
+      usernameTaken.value = true;
+    }
+  });
+}
+
+function onSubmit() {
+  const registerRequest = {
+    firstname: firstname.value,
+    lastname: lastname.value,
+    username: email.value,
+    password: password.value,
+  };
+  emit('register', registerRequest);
+}
+
+
+
 </script>
 
 <style scoped>
