@@ -40,6 +40,14 @@ const routes = [
         }
       },
       {
+        path: '/partner',
+        name: 'Partner',
+        component: () => import('@/views/Partner.vue'),
+        meta: {
+          name: 'Partnerübersicht'
+        }
+      },
+      {
         path: '/administrator',
         name: 'Administrator',
         meta: {

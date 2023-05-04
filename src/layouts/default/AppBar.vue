@@ -75,6 +75,7 @@ const isMobile = ref(useDisplay());
 const items = [
   {title: 'Home', to: '/', icon: 'mdi-home'},
   {title: 'Profile', to: '/profiles', icon: 'mdi-account'},
+  {title: 'Partner', to: '/partner', icon: 'mdi-account-group'},
   {title: 'Einstellungen', to: '/settings', icon: 'mdi-cog'},
 ];
 
