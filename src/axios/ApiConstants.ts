@@ -12,3 +12,5 @@ export const API_CHANGE_CURRENT_USER_INFO = '/v1/user/change';
 export const API_GET_ALL_SETTINGS_SHORT = "/v1/settings/all"
 export const API_GET_ALL_SETTINGS_LONG = "/v1/settings/all/long"
 export const API_SET_SINGLE_SETTING = "/v1/settings/set"
+export const API_GET_PARTNER_LIST = "/v1/partner"
+export const API_GET_PARTNER_TYPES = "/v1/partner/types"

@@ -1,6 +1,8 @@
 <template>
   <v-container>
-    <h1>Partner!</h1>
+    <partner-list></partner-list>
   </v-container>
 </template>
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import PartnerList from "@/layouts/partner/PartnerList.vue";
+</script>
