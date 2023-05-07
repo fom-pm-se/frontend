@@ -1,5 +1,9 @@
 <script setup lang="ts">
+  const emits = defineEmits(['createPartner']);
 
+  function emitCreatePartner() {
+   emits('createPartner');
+  }
 </script>
 
 <template>
@@ -16,7 +20,7 @@
       <div class="text-h5 font-weight-light mb-2">
         Es wurden noch keine Partner angelegt. Klicke auf "Partner hinzufügen" um zu beginnen
       </div>
-      <v-btn variant="tonal" prepend-icon="mdi-vector-square-plus" color="secondary" class="ma-3">Partner hinzufügen
+      <v-btn variant="tonal" prepend-icon="mdi-vector-square-plus" color="secondary" class="ma-3" @click="emitCreatePartner">Partner hinzufügen
       </v-btn>
       <v-btn icon="mdi-information" variant="text" color="secondary"></v-btn>
     </div>

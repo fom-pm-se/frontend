@@ -1,37 +1,42 @@
 <template>
-  <div v-if="isLoading">
-    <div class="text-center">Lade Partner...</div>
-    <v-progress-linear indeterminate color="secondary"></v-progress-linear>
-  </div>
+  <alert-wrapper/>
   <v-row>
-    <v-col cols="12" :sm="!isSelected ? '12' : '6'">
+    <v-btn prepend-icon="mdi-chevron-down" variant="text" color="secondary" @click="showSearchMenu = !showSearchMenu">Aktionen</v-btn>
+    <v-expand-transition>
+      <v-container fluid v-show="showSearchMenu">
+        <v-text-field label="Suche" variant="underlined" prepend-inner-icon="mdi-magnify"></v-text-field>
+        <v-dialog v-model="showCreateDialog">
+          <v-container>
+            <v-card>
+              <v-card-text>
+                <add-partner-form @success="newPartnerCreated"></add-partner-form>
+              </v-card-text>
+            </v-card>
+          </v-container>
+        </v-dialog>
+        <v-btn prepend-icon="mdi-refresh" variant="outlined" color="secondary" @click="fetchPartners" class="mr-3">Neu laden</v-btn>
+        <v-btn prepend-icon="mdi-plus" variant="outlined" color="secondary" @click="showCreateDialog = true">Neuer Partner</v-btn>
+      </v-container>
+    </v-expand-transition>
+  </v-row>
+  <v-row>
+    <v-col cols="12" sm="6">
       <v-list>
-        <v-list-item v-for="partner in partners" :key="partner.id" :value="partner" active-color="secondary" @click="setSelected(partner)">
+        <h3 class="mb-3">Partner</h3>
+        <v-list-item v-for="partner in partners" :key="partner.id" :value="partner" active-color="secondary" @click="setSelected(partner)" class="pa-2 pl-8">
           <v-list-item-title>{{ partner.name }}</v-list-item-title>
           <v-list-item-subtitle>{{ partner.type }}</v-list-item-subtitle>
         </v-list-item>
       </v-list>
-      <v-dialog v-model="showCreateDialog">
-        <template v-slot:activator="{ props }">
-          <v-btn
-            color="secondary"
-            prepend-icon="mdi-vector-square-plus"
-            variant="outlined"
-            v-bind="props"
-          >
-            Partner hinzufügen
-          </v-btn>
-        </template>
-        <v-card>
-          <add-partner-form></add-partner-form>
-        </v-card>
-      </v-dialog>
     </v-col>
     <v-col sm="6">
-      <partner-details v-if="isSelected" :partner="selectedPartner as Partner"></partner-details>
+      <v-slide-x-transition>
+        <partner-details :partner="selectedPartner as Partner" v-show="isSelected"></partner-details>
+      </v-slide-x-transition>
     </v-col>
   </v-row>
-  <no-partner-created v-if="partners.length < 1 && !isLoading"></no-partner-created>
+  <no-partner-created v-if="partners.length < 1 && !isLoading" @create-partner="showCreateDialog = true"></no-partner-created>
+  <snackbar-wrapper/>
 </template>
 
 <script lang="ts" setup>
@@ -41,10 +46,16 @@ import AddPartnerForm from "@/layouts/partner/AddPartnerForm.vue";
 import NoPartnerCreated from "@/components/partner/NoPartnerCreated.vue";
 import {Partner} from "@/model/store/Partner";
 import PartnerDetails from "@/components/partner/PartnerDetails.vue";
+import SnackbarWrapper from "@/components/common/SnackbarWrapper.vue";
+import {useAlertStore} from "@/store/AlertStore";
+import AlertWrapper from "@/components/common/AlertWrapper.vue";
 
 const partnerStore = usePartnerStore();
 const isLoading = partnerStore.isLoading;
 const partners = ref(partnerStore.partners);
+const alertStore = useAlertStore();
+
+const showSearchMenu = ref(false);
 
 const showCreateDialog = ref(false);
 
@@ -57,13 +68,27 @@ partnerStore.fetchPartners().finally(
   }
 );
 
+const note = ref({} as Object);
+
 function setSelected(partner: any) {
-  if (selectedPartner.value === partner) {
+  if (selectedPartner.value === partner && isSelected.value) {
     isSelected.value = false;
-    selectedPartner.value = "";
     return;
   }
   selectedPartner.value = partner;
   isSelected.value = true;
+}
+
+function fetchPartners() {
+  partnerStore.fetchPartners().finally(
+    () => {
+      partners.value = partnerStore.partners;
+    }
+  );
+}
+
+function newPartnerCreated() {
+  showCreateDialog.value = false;
+  alertStore.showSnackbarMessage("Partner gespeichert");
 }
 </script>

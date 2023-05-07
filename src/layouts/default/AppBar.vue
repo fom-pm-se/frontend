@@ -1,6 +1,7 @@
 <template>
   <v-app-bar color="primary">
     <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+    {{ route.meta.name }}
     <v-spacer></v-spacer>
     <div v-if="isLoading">
       Lade Daten...
@@ -60,9 +61,12 @@ import {logout} from "@/service/AuthenticationService";
 import {useUserStore} from "@/store/UserStore";
 import {storeToRefs} from "pinia";
 import {useGlobalPropertiesStore} from "@/store/GlobalPropertiesStore";
+import {useRoute} from "vue-router";
 
 const globalPropertiesStore = useGlobalPropertiesStore();
 const { isLoading } = storeToRefs(globalPropertiesStore);
+
+const route = useRoute();
 
 const theme = useTheme();
 let drawer = ref(false);

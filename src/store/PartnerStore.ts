@@ -40,6 +40,16 @@ export const usePartnerStore = defineStore('partnerStore', {
       }
       this.partners.push(response.data)
       this.isLoading = false
+    },
+    async fetchPartnerById(id: any): Promise<Partner> {
+      this.isLoading = true
+      const response: AxiosResponse<Partner> = await axios.get(API_GET_PARTNER_LIST + '/' + id)
+      if (response.status !== 200) {
+        this.isLoading = false
+        return Promise.reject(response)
+      }
+      this.isLoading = false
+      return Promise.resolve(response.data as Partner)
     }
   }
 })
