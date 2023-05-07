@@ -9,35 +9,22 @@
       <setting-toggle :setting="setting" @setting-changed="showSnackbar"></setting-toggle>
     </v-col>
   </v-row>
-  <div class="text-center ma-2">
-    <v-snackbar
-      v-model="snackbar"
-      :close-on-content-click="true"
-      :location="!isMobile.xs ? 'bottom left' : 'bottom'"
-      timeout="900"
-    >
-      Gespeichert!
-    </v-snackbar>
-  </div>
+  <snackbar-wrapper></snackbar-wrapper>
 </template>
 
 <script lang="ts" setup>
 import {useSettingsStore} from "@/store/SettingsStore";
 import {ref} from "vue";
 import SettingToggle from "@/layouts/administrator/elements/SettingToggle.vue";
-import {useDisplay} from "vuetify";
+import SnackbarWrapper from "@/components/common/SnackbarWrapper.vue";
+import {useAlertStore} from "@/store/AlertStore";
 
-const isMobile = ref(useDisplay());
-
-let snackbar = ref(false as boolean);
-
+const alertStore = useAlertStore();
 let isLoading = ref(true);
 
 function showSnackbar(success: boolean) {
-  snackbar.value = false;
-  console.log(snackbar.value);
   if (success) {
-    snackbar.value = true;
+    alertStore.showSnackbarMessage('Einstellungen gespeichert!');
   }
 }
 
