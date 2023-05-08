@@ -4,7 +4,7 @@
     <v-btn prepend-icon="mdi-chevron-down" variant="text" color="secondary" @click="showSearchMenu = !showSearchMenu">Aktionen</v-btn>
     <v-expand-transition>
       <v-container fluid v-show="showSearchMenu">
-        <v-text-field label="Suche" variant="underlined" prepend-inner-icon="mdi-magnify"></v-text-field>
+        <v-text-field label="Suche" variant="underlined" prepend-inner-icon="mdi-magnify" v-model="searchTerm" @update:modelValue="searchPartnersForName"></v-text-field>
         <v-dialog v-model="showCreateDialog">
           <v-container>
             <v-card>
@@ -23,7 +23,8 @@
     <v-col cols="12" sm="6">
       <v-list>
         <h3 class="mb-3">Partner</h3>
-        <v-list-item v-for="partner in partners" :key="partner.id" :value="partner" active-color="secondary" @click="setSelected(partner)" class="pa-2 pl-8">
+        <v-alert v-if="searchTerm.length > 0 && searchResults.length === 0">Keine Ergebnisse</v-alert>
+        <v-list-item v-for="partner in searchResults" :key="partner.id" :value="partner" active-color="secondary" @click="setSelected(partner)" class="pa-2 pl-8">
           <v-list-item-title>{{ partner.name }}</v-list-item-title>
           <v-list-item-subtitle>{{ partner.type }}</v-list-item-subtitle>
         </v-list-item>
@@ -56,18 +57,24 @@ const partners = ref(partnerStore.partners);
 const alertStore = useAlertStore();
 
 const showSearchMenu = ref(false);
-
 const showCreateDialog = ref(false);
 
 const selectedPartner = ref("");
 const isSelected = ref(false);
 
+const searchTerm = ref("" as string);
+const searchResults = ref([] as Partner[]);
+
 partnerStore.fetchPartners().finally(
   () => {
     partners.value = partnerStore.partners;
+    searchResults.value = {...partners.value};
   }
 );
 
+function searchPartnersForName(nameSearchTerm: string) {
+  searchResults.value = partners.value.filter((partner: Partner) => {return partner.name.includes(nameSearchTerm)})
+}
 const note = ref({} as Object);
 
 function setSelected(partner: any) {
