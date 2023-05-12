@@ -59,7 +59,6 @@ let userToEdit = {} as User;
 const userStore = useUserStore();
 const alertStore = useAlertStore();
 
-const snackbar = ref(false as boolean);
 const isMobile = ref(useDisplay())
 
 const editDialog = ref(false as boolean);

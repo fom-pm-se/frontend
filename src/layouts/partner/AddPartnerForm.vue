@@ -1,7 +1,7 @@
 <template>
     <v-row>
       <v-col>
-        <h1 class="text-teal"><v-icon>mdi-cog</v-icon> Partner hinzufügen</h1>
+        <h1><v-icon>mdi-cog</v-icon> Partner hinzufügen</h1>
       </v-col>
     </v-row>
     <v-row>
@@ -30,11 +30,8 @@ import {useAlertStore} from "@/store/AlertStore";
 const partnerStore = usePartnerStore();
 const alertStore = useAlertStore();
 const partnerTypes = ref(partnerStore.partnerTypes);
-const isLoading = ref(partnerStore.isLoading);
 
 const emit = defineEmits(['success']);
-
-const selected = ref<string[]>([]);
 
 const partner = ref({} as CreatePartner);
 

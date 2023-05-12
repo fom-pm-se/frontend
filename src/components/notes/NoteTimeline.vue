@@ -9,7 +9,7 @@
     </v-card-actions>
     <v-card-text>
       <v-timeline side="end" v-if="notes.length > 0">
-        <v-timeline-item v-for="note in notes" dot-color="secondary">
+        <v-timeline-item v-for="note in notes" dot-color="secondary" :key="note.id">
           <note-detail :note="note as Note" :partner="partner as Partner"></note-detail>
         </v-timeline-item>
       </v-timeline>

@@ -39,7 +39,7 @@
     </v-col>
     <v-col sm="6">
       <v-slide-x-transition>
-        <partner-details :partner="selectedPartner as Partner" v-show="isSelected"></partner-details>
+        <partner-details :partner="selectedPartner as Partner" v-show="isSelected" v-if="isSelected"></partner-details>
       </v-slide-x-transition>
     </v-col>
   </v-row>
@@ -72,9 +72,6 @@ const isSelected = ref(false);
 const searchTerm = ref("" as string);
 const typeSearchTerm = ref("" as string);
 const searchResults = ref([] as Partner[]);
-
-const note = ref({} as Object);
-
 
 fetchPartners();
 partnerStore.fetchPartnerTypes();

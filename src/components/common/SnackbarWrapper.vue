@@ -17,7 +17,5 @@ import {useAlertStore} from "@/store/AlertStore";
 const isMobile = ref(useDisplay());
 const alertStore = useAlertStore();
 
-const message = ref(alertStore.snackbarMessage);
-
 watch(alertStore, () => {});
 </script>

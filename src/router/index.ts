@@ -6,8 +6,6 @@ import {Alert} from "@/model/store/Alert";
 import {useSettingsStore} from "@/store/SettingsStore";
 import {useTokenStore} from "@/store/TokenStore";
 import {useGlobalPropertiesStore} from "@/store/GlobalPropertiesStore";
-import PartnerFullscreen from "@/components/partner/PartnerFullscreen.vue";
-import {id} from "vuetify/locale";
 
 const routes = [
   {
