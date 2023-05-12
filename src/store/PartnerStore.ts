@@ -50,6 +50,19 @@ export const usePartnerStore = defineStore('partnerStore', {
       }
       this.isLoading = false
       return Promise.resolve(response.data as Partner)
+    },
+    filterPartners(name: string, type: string): Partner[] {
+      console.log('Filter partners for ' + name + ' and ' + type)
+      if (name === null) {
+        name = '';
+      }
+      if (type === null) {
+        type = '';
+      }
+      return this.partners.filter(partner => partner.name.toLowerCase().includes(name.toLowerCase()) && partner.type.toLowerCase().includes(type.toLowerCase()))
+    },
+    getNumberOfPartners(): number {
+      return this.partners.length
     }
   }
 })

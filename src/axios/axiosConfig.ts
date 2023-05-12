@@ -22,6 +22,7 @@ export function registerAxios() {
       if (response.status !== 200) {
         const alertStore = useAlertStore();
         if (response.data.errorMessage) {
+          console.log(response.data.errorMessage);
           alertStore.setAlert({
             type: "error",
             message: response.data.errorMessage,

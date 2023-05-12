@@ -4,7 +4,14 @@
     <v-btn prepend-icon="mdi-chevron-down" variant="text" color="secondary" @click="showSearchMenu = !showSearchMenu">Aktionen</v-btn>
     <v-expand-transition>
       <v-container fluid v-show="showSearchMenu">
-        <v-text-field label="Suche" variant="underlined" prepend-inner-icon="mdi-magnify" v-model="searchTerm" @update:modelValue="searchPartnersForName"></v-text-field>
+        <v-row no-gutters>
+          <v-col cols="12" sm="8" class="mr-6">
+            <v-text-field label="Suche" variant="underlined" prepend-inner-icon="mdi-magnify" v-model="searchTerm" @update:modelValue="performSearch" clearable></v-text-field>
+          </v-col>
+          <v-col sm="3">
+            <v-select :items="partnerStore.partnerTypes" variant="underlined" label="Typ" @update:menu="performSearch" v-model="typeSearchTerm" clearable></v-select>
+          </v-col>
+        </v-row>
         <v-dialog v-model="showCreateDialog">
           <v-container>
             <v-card>
@@ -23,7 +30,7 @@
     <v-col cols="12" sm="6">
       <v-list>
         <h3 class="mb-3">Partner</h3>
-        <v-alert v-if="searchTerm.length > 0 && searchResults.length === 0">Keine Ergebnisse</v-alert>
+        <v-alert v-if="searchResults.length === 0">Keine Ergebnisse</v-alert>
         <v-list-item v-for="partner in searchResults" :key="partner.id" :value="partner" active-color="secondary" @click="setSelected(partner)" class="pa-2 pl-8">
           <v-list-item-title>{{ partner.name }}</v-list-item-title>
           <v-list-item-subtitle>{{ partner.type }}</v-list-item-subtitle>
@@ -63,19 +70,18 @@ const selectedPartner = ref("");
 const isSelected = ref(false);
 
 const searchTerm = ref("" as string);
+const typeSearchTerm = ref("" as string);
 const searchResults = ref([] as Partner[]);
 
-partnerStore.fetchPartners().finally(
-  () => {
-    partners.value = partnerStore.partners;
-    searchResults.value = {...partners.value};
-  }
-);
-
-function searchPartnersForName(nameSearchTerm: string) {
-  searchResults.value = partners.value.filter((partner: Partner) => {return partner.name.includes(nameSearchTerm)})
-}
 const note = ref({} as Object);
+
+
+fetchPartners();
+partnerStore.fetchPartnerTypes();
+
+function performSearch() {
+  searchResults.value = partnerStore.filterPartners(searchTerm.value, typeSearchTerm.value)
+}
 
 function setSelected(partner: any) {
   if (selectedPartner.value === partner && isSelected.value) {
@@ -87,15 +93,17 @@ function setSelected(partner: any) {
 }
 
 function fetchPartners() {
-  partnerStore.fetchPartners().finally(
+  partnerStore.fetchPartners().then(
     () => {
       partners.value = partnerStore.partners;
+      searchResults.value = {...partners.value};
     }
   );
 }
 
 function newPartnerCreated() {
   showCreateDialog.value = false;
+  fetchPartners();
   alertStore.showSnackbarMessage("Partner gespeichert");
 }
 </script>

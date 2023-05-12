@@ -8,7 +8,7 @@
         <v-card elevation="4" class="mt-3">
           <v-card-title>Termine</v-card-title>
           <v-card-actions>
-            <v-btn color="warning" prepend-icon="mdi-plus" variant="tonal">Termin hinzufügen</v-btn>
+            <v-btn color="secondary" prepend-icon="mdi-plus" variant="tonal">Termin hinzufügen</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
