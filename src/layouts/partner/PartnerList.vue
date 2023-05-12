@@ -66,7 +66,7 @@ const alertStore = useAlertStore();
 const showSearchMenu = ref(false);
 const showCreateDialog = ref(false);
 
-const selectedPartner = ref("");
+const selectedPartner = ref({} as Partner);
 const isSelected = ref(false);
 
 const searchTerm = ref("" as string);
