@@ -21,8 +21,8 @@ export default createVuetify({
       light: {
         dark: false,
         colors: {
-          primary: colors.teal.lighten1,
-          secondary: colors.teal.lighten2,
+          primary: "#00ACC1",
+          secondary: "#00ACC1",
           warning: colors.amber.base,
           success: colors.green.base,
           info: colors.blue.base,
@@ -33,7 +33,7 @@ export default createVuetify({
         dark: true,
         colors: {
           primary: '#353535',
-          secondary: colors.teal.lighten4,
+          secondary: '#26C6DA',
           warning: colors.lime.accent1,
           success: colors.lightGreen.base,
           info: colors.blue.lighten4,

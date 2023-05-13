@@ -40,6 +40,22 @@ const routes = [
         }
       },
       {
+        path: '/partner',
+        name: 'Partner',
+        component: () => import('@/views/Partner.vue'),
+        meta: {
+          name: 'Partnerübersicht'
+        }
+      },
+      {
+        path: '/partner/:id',
+        name: 'PartnerDetail',
+        component: () => import('@/components/partner/PartnerFullscreen.vue'),
+        meta: {
+          name: 'Partner anzeigen'
+        }
+      },
+      {
         path: '/administrator',
         name: 'Administrator',
         meta: {

@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import {Alert} from "@/model/store/Alert";
 
 export const useAlertStore = defineStore('alertStore', {
-  state: () => ({alerts: [] as Alert[]}),
+  state: () => ({alerts: [] as Alert[], showSnackbar: false, snackbarMessage: '' as string}),
   actions: {
     clearAlerts() {
       while (this.alerts.length > 0) {
@@ -15,6 +15,15 @@ export const useAlertStore = defineStore('alertStore', {
     setAlert(alert: Alert) {
       this.clearAlerts();
       this.pushAlert(alert);
+    },
+    showSnackbarMessage(message: string) {
+      this.snackbarMessage = message;
+      this.showSnackbar = true;
+    },
+    hideSnackbarMessage()
+    {
+      this.snackbarMessage = '';
+      this.showSnackbar = false;
     }
   }
 })

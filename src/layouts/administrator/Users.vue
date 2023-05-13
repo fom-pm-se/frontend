@@ -38,14 +38,7 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <v-snackbar
-      v-model="snackbar"
-      :close-on-content-click="true"
-      :location="isMobile.xs ? 'bottom' : 'bottom left'"
-      timeout="900"
-    >
-      Gespeichert!
-    </v-snackbar>
+    <snackbar-wrapper/>
   </v-row>
 </template>
 
@@ -57,13 +50,15 @@ import {lockUserAdmin} from "@/service/AuthenticationService";
 import UserDataForm from "@/layouts/settings/UserDataForm.vue";
 import {User} from "@/model/store/User";
 import {useDisplay} from "vuetify";
+import SnackbarWrapper from "@/components/common/SnackbarWrapper.vue";
+import {useAlertStore} from "@/store/AlertStore";
 
 let userToEdit = {} as User;
 
 
 const userStore = useUserStore();
+const alertStore = useAlertStore();
 
-const snackbar = ref(false as boolean);
 const isMobile = ref(useDisplay())
 
 const editDialog = ref(false as boolean);
@@ -97,14 +92,14 @@ function onUserChanged(success: boolean) {
   if (success) {
     onUserLoad();
     editDialog.value = false;
-    snackbar.value = true;
+    alertStore.showSnackbarMessage('Benutzer gespeichert!');
   }
 }
 
 function onLockUser(username: string) {
   lockUserAdmin(username).then(() => {
     onUserLoad();
-    snackbar.value = true;
+    alertStore.showSnackbarMessage('Benutzer gesperrt/entsperrt!')
   });
 }
 </script>
