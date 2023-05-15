@@ -28,9 +28,8 @@
   </v-row>
   <v-row>
     <v-col cols="12" sm="6">
-      <v-list>
-        <h3 class="mb-3">Partner</h3>
-        <v-alert v-if="searchResults.length === 0">Keine Ergebnisse</v-alert>
+      <v-alert v-if="searchResults.length === 0">Keine Ergebnisse</v-alert>
+      <v-list v-if="partnerStore.partners.length > 0">
         <v-list-item v-for="partner in searchResults" :key="partner.id" :value="partner" active-color="secondary" @click="setSelected(partner)" class="pa-2 pl-8">
           <v-list-item-title>{{ partner.name }}</v-list-item-title>
           <v-list-item-subtitle>{{ partner.type }}</v-list-item-subtitle>
