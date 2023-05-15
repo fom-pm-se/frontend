@@ -6,10 +6,9 @@
         <v-card-text>{{ notification.subtitle }}</v-card-text>
       </v-card>
     </v-expand-transition>
-    <v-btn variant="text" color="secondary" prepend-icon="mdi-information-outline" class="mt-3"
-           v-if="notification?.url" :to="notification.url">Zur Seite
-    </v-btn>
-    <v-btn variant="text" color="secondary" icon="mdi-eye-outline" class="mt-3" @click="markAsRead" :loading="isLoading"></v-btn>
+    <v-btn variant="text" color="secondary" prepend-icon="mdi-information-outline"
+           v-if="notification?.url" :to="notification.url">Zur Seite</v-btn>
+    <v-btn variant="text" color="secondary" icon="mdi-eye-outline" @click="markAsRead" :loading="isLoading"></v-btn>
     <v-btn :icon="details ? 'mdi-chevron-up' : 'mdi-chevron-down'" variant="text" color="secondary" @click="details = !details"></v-btn>
   </v-list-item>
 </template>
