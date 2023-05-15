@@ -3,7 +3,7 @@
     <v-list-item-title>{{ notification.title }}</v-list-item-title>
     <v-list-item-subtitle>{{ notification.subtitle }}</v-list-item-subtitle>
     <v-btn variant="text" color="secondary" prepend-icon="mdi-information-outline" class="mt-3"
-           v-if="props.notification?.url">Mehr
+           v-if="notification?.url" :to="notification.url">Mehr
     </v-btn>
     <v-btn variant="text" color="secondary" prepend-icon="mdi-eye-outline" class="mt-3" @click="markAsRead" :loading="isLoading">Gelesen
     </v-btn>
