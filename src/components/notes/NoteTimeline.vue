@@ -13,7 +13,7 @@
           <note-detail :note="note as Note" :partner="partner as Partner"></note-detail>
         </v-timeline-item>
       </v-timeline>
-      <v-alert v-else rounded="xl" variant="tonal" color="warning">Keine Notizen vorhanden</v-alert>
+      <v-alert v-else variant="tonal">Keine Notizen vorhanden</v-alert>
     </v-card-text>
     <v-dialog v-model="showCreateNoteDialog" width="500">
       <v-container>

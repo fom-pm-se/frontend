@@ -6,6 +6,7 @@ import {Alert} from "@/model/store/Alert";
 import {useSettingsStore} from "@/store/SettingsStore";
 import {useTokenStore} from "@/store/TokenStore";
 import {useGlobalPropertiesStore} from "@/store/GlobalPropertiesStore";
+import {useNotificationStore} from "@/store/NotificationStore";
 
 const routes = [
   {
@@ -117,21 +118,36 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
-})
+});
 
 router.beforeEach(async (to) => {
+  const userStore = useUserStore();
+  const tokenStore = useTokenStore();
+  const settingsStore = useSettingsStore();
+  const notificationStore = useNotificationStore();
+
+
+  if (to.path !== '/login') {
+    await userStore.fetchUser()
+      .then(() => {
+        notificationStore.fetchNotifications();
+        notificationStore.getNumberOfUnreadNotifications();
+        settingsStore.fetchSettingsShort();
+      })
+      .catch(() => {
+        userStore.flushUser();
+        tokenStore.flushToken();
+        return {name: 'Login'}
+      })
+  }
+});
+
+router.beforeEach(async (to) => {
+
   const globalPropertiesStore = useGlobalPropertiesStore();
   globalPropertiesStore.setLoading(true);
   const userStore = useUserStore();
   const alertStore = useAlertStore();
-  const settingsStore = useSettingsStore();
-  const tokenStore = useTokenStore();
-
-  await userStore.fetchUser().catch(() => {
-    userStore.flushUser();
-    tokenStore.flushToken();
-  });
-  await settingsStore.fetchSettingsShort();
 
   if (to.meta.adminAccess && !(userStore.isAdministrator())) {
     const alert: Alert = {
