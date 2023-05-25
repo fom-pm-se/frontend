@@ -18,3 +18,9 @@ export const API_GET_PARTNER_TYPES = "/v1/partner/types"
 export const API_GET_NOTES = "/v1/notes"
 export const API_UPDATE_NOTE = API_GET_NOTES
 export const API_CREATE_NOTE = API_GET_NOTES
+
+
+export const API_GET_NOTIFICATIONS_COUNT = "/v1/notification/unread/count"
+export const API_GET_NOTIFICATIONS = "/v1/notification/unread/"
+
+export const API_SET_NOTIFICATION_READ = "/v1/notification/"

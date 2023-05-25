@@ -1,18 +1,29 @@
 <template>
   <v-app-bar color="primary">
     <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-    {{ route.meta.name }}
+    {{ route.meta?.name }}
     <v-spacer></v-spacer>
     <div v-if="isLoading">
       Lade Daten...
       <v-progress-circular indeterminate class="ml-3"></v-progress-circular>
     </div>
     <v-spacer></v-spacer>
-    <v-btn icon @click="toggleTheme">
-      <v-icon>{{ theme.global.current.value.dark ? 'mdi-lightbulb-on' : 'mdi-lightbulb' }}</v-icon>
+    <v-btn icon class="mr-2">
+      <v-icon icon="mdi-theme-light-dark" size="x-large" @click="toggleTheme"></v-icon>
     </v-btn>
+    <v-menu :close-on-content-click="false">
+      <template v-slot:activator="{ props }">
+        <v-btn icon class="mr-2" v-bind="props" :loading="notificationStore.isLoading">
+          <v-badge dot color="red" class="mr-2" inline v-if="notificationStore.notificationsCount > 0">
+            <v-icon icon="mdi-bell" size="x-large"></v-icon>
+          </v-badge>
+          <v-icon icon="mdi-bell-outline" size="x-large" v-if="notificationStore.notificationsCount === 0"></v-icon>
+        </v-btn>
+      </template>
+      <NotificationList/>
+    </v-menu>
     <v-btn icon @click="logout">
-      <v-icon>mdi-logout</v-icon>
+      <v-icon size="x-large">mdi-logout</v-icon>
     </v-btn>
   </v-app-bar>
   <v-navigation-drawer
@@ -62,9 +73,12 @@ import {useUserStore} from "@/store/UserStore";
 import {storeToRefs} from "pinia";
 import {useGlobalPropertiesStore} from "@/store/GlobalPropertiesStore";
 import {useRoute} from "vue-router";
+import NotificationList from "@/components/notifications/NotificationList.vue";
+import {useNotificationStore} from "@/store/NotificationStore";
 
 const globalPropertiesStore = useGlobalPropertiesStore();
-const { isLoading } = storeToRefs(globalPropertiesStore);
+const {isLoading} = storeToRefs(globalPropertiesStore);
+const notificationStore = useNotificationStore();
 
 const route = useRoute();
 
@@ -73,6 +87,8 @@ let drawer = ref(false);
 
 const userStore = useUserStore();
 let {user} = storeToRefs(userStore);
+
+notificationStore.getNumberOfUnreadNotifications().finally(() => {})
 
 const isMobile = ref(useDisplay());
 

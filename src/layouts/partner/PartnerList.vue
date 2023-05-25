@@ -1,7 +1,7 @@
 <template>
   <alert-wrapper/>
   <v-row>
-    <v-btn prepend-icon="mdi-chevron-down" variant="text" color="secondary" @click="showSearchMenu = !showSearchMenu">Aktionen</v-btn>
+    <v-btn prepend-icon="mdi-chevron-down" variant="text" color="secondary" @click="showSearchMenu = !showSearchMenu" v-if="!(partners.length < 1 && !isLoading)">Aktionen</v-btn>
     <v-expand-transition>
       <v-container fluid v-show="showSearchMenu">
         <v-row no-gutters>
@@ -12,7 +12,7 @@
             <v-select :items="partnerStore.partnerTypes" variant="underlined" label="Typ" @update:menu="performSearch" v-model="typeSearchTerm" clearable></v-select>
           </v-col>
         </v-row>
-        <v-dialog v-model="showCreateDialog">
+        <v-dialog v-model="showCreateDialog" :width="isMobile()? '100%' : '500px'">
           <v-container>
             <v-card>
               <v-card-text>
@@ -28,9 +28,8 @@
   </v-row>
   <v-row>
     <v-col cols="12" sm="6">
-      <v-list>
-        <h3 class="mb-3">Partner</h3>
-        <v-alert v-if="searchResults.length === 0">Keine Ergebnisse</v-alert>
+      <v-alert v-if="searchResults.length === 0">Keine Ergebnisse</v-alert>
+      <v-list v-if="partnerStore.partners.length > 0">
         <v-list-item v-for="partner in searchResults" :key="partner.id" :value="partner" active-color="secondary" @click="setSelected(partner)" class="pa-2 pl-8">
           <v-list-item-title>{{ partner.name }}</v-list-item-title>
           <v-list-item-subtitle>{{ partner.type }}</v-list-item-subtitle>
@@ -57,6 +56,7 @@ import PartnerDetails from "@/components/partner/PartnerDetails.vue";
 import SnackbarWrapper from "@/components/common/SnackbarWrapper.vue";
 import {useAlertStore} from "@/store/AlertStore";
 import AlertWrapper from "@/components/common/AlertWrapper.vue";
+import {useDisplay} from "vuetify";
 
 const partnerStore = usePartnerStore();
 const isLoading = partnerStore.isLoading;
@@ -73,8 +73,14 @@ const searchTerm = ref("" as string);
 const typeSearchTerm = ref("" as string);
 const searchResults = ref([] as Partner[]);
 
+const xs = ref(useDisplay());
+
 fetchPartners();
 partnerStore.fetchPartnerTypes();
+
+function isMobile(): boolean {
+  return xs.value.xs;
+}
 
 function performSearch() {
   searchResults.value = partnerStore.filterPartners(searchTerm.value, typeSearchTerm.value)
@@ -92,10 +98,18 @@ function setSelected(partner: any) {
 function fetchPartners() {
   partnerStore.fetchPartners().then(
     () => {
+      resetFilterCriteria();
       partners.value = partnerStore.partners;
       searchResults.value = {...partners.value};
     }
   );
+}
+
+function resetFilterCriteria() {
+  searchTerm.value = "";
+  typeSearchTerm.value = "";
+  selectedPartner.value = {} as Partner;
+  isSelected.value = false;
 }
 
 function newPartnerCreated() {

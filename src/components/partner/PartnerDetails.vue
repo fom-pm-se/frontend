@@ -1,30 +1,23 @@
 <template>
   <v-card elevation="6">
     <v-card-title>{{ partner.name }}
-    <v-btn icon="mdi-arrow-expand" variant="text" color="secondary" @click="router.push('/partner/' + partner.id)"></v-btn>
     </v-card-title>
     <v-card-text><h4>Art: {{ partner.type }}</h4></v-card-text>
     <v-card-text>
       <v-text-field label="Adresse" readonly variant="plain" :model-value="partner.address"></v-text-field>
       <v-text-field label="Telefonnummer" readonly variant="plain" :model-value="partner.phoneNumber"></v-text-field>
       <v-btn :prepend-icon="showDetails ? 'mdi-chevron-up' : 'mdi-chevron-down'" variant="text" color="secondary" @click="showDetails = !showDetails">Änderungsdetails</v-btn>
+      <v-btn color="secondary" variant="outlined" prepend-icon="mdi-arrow-expand" @click="router.push('/partner/' + partner.id)" >Details anzeigen</v-btn>
       <v-btn color="error" icon="mdi-delete" variant="text"></v-btn>
     </v-card-text>
     <v-expand-transition>
       <v-card-text v-show="showDetails">
-        <div>
-          Erstellt von: {{ partner.createdByUsername }}
-        </div>
-        <div>
-          Erstellt am: {{ partner.creationTime }}
-        </div>
-        <v-divider class="my-3"></v-divider>
-        <div>
-          Geändert von: {{ partner.updatedByUsername }}
-        </div>
-        <div>
-          Geändert am: {{ partner.updateTime }}
-        </div>
+        <v-alert class="my-3">
+          Erstell von {{ partner.createdByUsername }} am {{ partner.creationTime }}
+        </v-alert>
+        <v-alert class="my-3">
+          Geändert von {{ partner.updatedByUsername }} am {{ partner.updateTime }}
+        </v-alert>
       </v-card-text>
     </v-expand-transition>
   </v-card>
