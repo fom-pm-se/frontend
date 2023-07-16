@@ -3,37 +3,30 @@
       <v-card-title>Termin hinzufügen</v-card-title>
       <v-card-text>
         <v-form :disabled="loading">
-
-          <!--v-date-picker requires v3.3.4 <v-date-picker>TEST</v-date-picker> --> 
             <v-text-field v-model="title" type="text" label="Titel"></v-text-field>
             <v-text-field v-model="start" type="datetime-local" label="Start"></v-text-field>
             <v-text-field v-model="end" type="datetime-local" label="Ende"></v-text-field>
             <v-text-field v-model="place" type="text" label="Ort"></v-text-field>
-
-          <v-btn @click="download()" variant="tonal" prepend-icon="mdi-content-save-outline" color="secondary" :loading="loading"
+          <v-btn @click="download" variant="tonal" prepend-icon="mdi-content-save-outline" color="secondary" :loading="loading"
                  >Export
           </v-btn>
         </v-form>
       </v-card-text>
-    </v-card>
-  
-
-
-
-
-
+      </v-card>
 </template>
 
 <script setup lang="ts">
 
+import { defineEmits } from "vue";
 import { ref } from "vue";
 
+const loading = ref(false as boolean);
+const title = ref("" as string); //Todo: save user input and add to newEvent --> SUMMARY
+const start = new Date(); //Todo: save user input, transform (20230712T211531Z) and add to newEvent --> DTSTART 
+const end = new Date(); //Todo: save user input, transform (20230712T211531Z) and add to newEvent --> DTEND 
+const place = ref("" as string); //Todo: save user input and add to newEvent --> LOCATION
 
-const loading = ref(false);
-const title = ref();
-const start = ref();
-const end = ref();
-const place = ref();
+const emit = defineEmits(['success']);
 
 const newEvent = "BEGIN:VCALENDAR"+"\n"+
 "VERSION:2.0"+"\n"+
@@ -54,21 +47,17 @@ const newEvent = "BEGIN:VCALENDAR"+"\n"+
 "END:VEVENT"+"\n"+
 "END:VCALENDAR";
 
-
 function download () {
-    let filename = 'calendar.ics';
-    let text =  newEvent;
-
-    let element = document.createElement('a');
+    const filename = 'calendar.ics';
+    const text =  newEvent;
+    const element = document.createElement('a');
     element.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(text));
-	element.setAttribute('download', filename);
-
+    element.setAttribute('download', filename);
     element.style.display = 'none';
-	document.body.appendChild(element);
-
-	element.click();
-	document.body.removeChild(element);
-
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
     loading.value = true;
+    emit('success');
 }
 </script>
